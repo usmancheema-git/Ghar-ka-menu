@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>S3: Assign Dish Wireframe - Ghar ka Menu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+
+  <div class="wireframe-container">
+
+    <!-- Left Spec Panel -->
+    <div class="spec-panel">
+      <a href="../index.html" class="btn-home-link">
+        <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+      </a>
+      <h1>Assign Dish</h1>
+      <span class="screen-badge">Screen S3</span>
+
+      <div class="spec-section">
+        <h3><i class="fa-solid fa-circle-info"></i> Description</h3>
+        <p>Planner-only screen. Opened by tapping the <code>+</code> button on an empty day in S2. Dishes are listed with recommendation sorting — longest since cooked appears at the top.</p>
+      </div>
+
+      <div class="spec-section">
+        <h3><i class="fa-solid fa-calculator"></i> Rotation Score Logic</h3>
+        <p style="background:#1A1A1D; border-radius:8px; padding:10px; font-family:monospace; font-size:12px; color:#A0FFA0; border:1px solid #2D2D30;">
+          score = days_since_last_cooked<br>
+          (never cooked = ∞ — top priority)<br>
+          sort: score <strong>DESC</strong>
+        </p>
+      </div>
+
+      <div class="spec-section">
+        <h3><i class="fa-solid fa-triangle-exclamation" style="color:#E6A23C;"></i> Repeat Warning</h3>
+        <p>If a dish is already in the current 7-day rolling plan, an amber <em>"is hafte ban chuki hai"</em> badge appears. It's a soft warning — it does not block selection.</p>
+      </div>
+
+      <div class="spec-section">
+        <h3><i class="fa-solid fa-filter"></i> Category Tabs</h3>
+        <p>Horizontal scrolling tabs (All, Sabzi, Daal, Chawal, Gosht, Murgh, Special) filter the list within the chosen category while keeping the same score-based sort.</p>
+      </div>
+    </div>
+
+    <!-- Right: Device Frame -->
+    <div class="device-wrapper">
+      <div class="device-header">
+        <div class="notch"></div>
+        <span class="time">01:18 PM</span>
+        <div class="status-right">
+          <i class="fa-solid fa-wifi"></i>
+          <i class="fa-solid fa-battery-full"></i>
+        </div>
+      </div>
+
+      <div class="app-screen" style="padding-bottom: 0;">
+
+        <!-- Back header -->
+        <div class="screen-header-back">
+          <a href="../s2_week_view/index.html" class="btn-back">
+            <i class="fa-solid fa-arrow-left"></i>
+          </a>
+          <div>
+            <div class="header-back-title">Assign Lunch</div>
+            <div style="font-size:10.5px; color:var(--text-muted); margin-top:1px;">Sunday, 20 July</div>
+          </div>
+        </div>
+
+        <!-- Category Tabs -->
+        <div class="category-tabs">
+          <div class="cat-tab active">All</div>
+          <div class="cat-tab">Sabzi</div>
+          <div class="cat-tab">Daal</div>
+          <div class="cat-tab">Chawal</div>
+          <div class="cat-tab">Gosht</div>
+          <div class="cat-tab">Murgh</div>
+          <div class="cat-tab">Special</div>
+        </div>
+
+        <!-- Search -->
+        <div class="search-bar-container">
+          <div class="search-input-wrapper">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" class="search-input" placeholder="Search Pakistani dishes…">
+          </div>
+        </div>
+
+        <!-- Dish list — sorted by score DESC -->
+        <div class="assign-dish-list">
+
+          <!-- 1. Never cooked (∞ score — top) -->
+          <a href="../s2_week_view/index.html" class="assign-card">
+            <div class="assign-info">
+              <div class="assign-dish-name">Karelay Pyaz</div>
+              <div class="assign-cooked-tag">
+                <i class="fa-solid fa-clock-rotate-left"></i> kabhi nahi bani
+              </div>
+            </div>
+            <div class="assign-score-badge">Sabzi</div>
+          </a>
+
+          <!-- 2. 25 days ago -->
+          <a href="../s2_week_view/index.html" class="assign-card">
+            <div class="assign-info">
+              <div class="assign-dish-name">Haleem Special</div>
+              <div class="assign-cooked-tag">
+                <i class="fa-solid fa-clock-rotate-left"></i> 25 din pehle
+              </div>
+            </div>
+            <div class="assign-score-badge">Special</div>
+          </a>
+
+          <!-- 3. 18 days ago -->
+          <a href="../s2_week_view/index.html" class="assign-card">
+            <div class="assign-info">
+              <div class="assign-dish-name">Chicken Pulao</div>
+              <div class="assign-cooked-tag">
+                <i class="fa-solid fa-clock-rotate-left"></i> 18 din pehle
+              </div>
+            </div>
+            <div class="assign-score-badge">Chawal</div>
+          </a>
+
+          <!-- 4. 12 days ago -->
+          <a href="../s2_week_view/index.html" class="assign-card">
+            <div class="assign-info">
+              <div class="assign-dish-name">Daal Mash (Fry)</div>
+              <div class="assign-cooked-tag">
+                <i class="fa-solid fa-clock-rotate-left"></i> 12 din pehle
+              </div>
+            </div>
+            <div class="assign-score-badge">Daal</div>
+          </a>
+
+          <!-- 5. In current week plan — repeat warning -->
+          <a href="../s2_week_view/index.html" class="assign-card">
+            <div class="assign-info">
+              <div class="assign-dish-name">Chicken Biryani</div>
+              <div class="assign-cooked-tag">
+                <i class="fa-solid fa-clock-rotate-left"></i> 1 din pehle
+              </div>
+              <span class="repeat-warning-badge">
+                <i class="fa-solid fa-triangle-exclamation"></i> is hafte ban chuki hai
+              </span>
+            </div>
+            <div class="assign-score-badge">Chawal</div>
+          </a>
+
+          <!-- 6. Cooked today — repeat warning -->
+          <a href="../s2_week_view/index.html" class="assign-card">
+            <div class="assign-info">
+              <div class="assign-dish-name">Bhindi Masala</div>
+              <div class="assign-cooked-tag">
+                <i class="fa-solid fa-clock-rotate-left"></i> aaj hi bani
+              </div>
+              <span class="repeat-warning-badge">
+                <i class="fa-solid fa-triangle-exclamation"></i> is hafte ban chuki hai
+              </span>
+            </div>
+            <div class="assign-score-badge">Sabzi</div>
+          </a>
+
+        </div>
+      </div>
+
+      <div class="device-footer"></div>
+    </div>
+
+  </div>
+
+</body>
+</html>

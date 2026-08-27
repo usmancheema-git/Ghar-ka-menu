@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>S6: Add / Edit Dish Wireframe - Ghar ka Menu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+
+  <div class="wireframe-container">
+
+    <!-- Left Spec Panel -->
+    <div class="spec-panel">
+      <a href="../index.html" class="btn-home-link">
+        <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+      </a>
+      <h1>Add / Edit Dish</h1>
+      <span class="screen-badge">Screen S6</span>
+
+      <div class="spec-section">
+        <h3><i class="fa-solid fa-circle-info"></i> Description</h3>
+        <p>Planner-only form for creating a new dish preset or editing an existing one. The header title dynamically reads <em>"Add New Dish"</em> or <em>"Edit Preset Dish"</em> based on entry point.</p>
+      </div>
+
+      <div class="spec-section">
+        <h3><i class="fa-solid fa-pencil"></i> Form Fields</h3>
+        <ul>
+          <li><strong>Dish Name</strong> — required, the primary identifier.</li>
+          <li><strong>Category</strong> — required dropdown (Sabzi, Daal, Chawal, Gosht, Murgh, Special).</li>
+          <li><strong>Ingredients</strong> — optional plain text (comma-separated). No ticking in v1.</li>
+          <li><strong>Notes</strong> — optional free-text for prep tips, reminders, or family recipes.</li>
+        </ul>
+      </div>
+
+      <div class="spec-section">
+        <h3><i class="fa-solid fa-shield-halved"></i> Access Rules</h3>
+        <p>Restricted to <strong>Planner</strong> role only. Supabase RLS blocks any INSERT or UPDATE from member-role tokens.</p>
+      </div>
+
+      <div class="spec-section">
+        <h3><i class="fa-solid fa-link"></i> Navigation</h3>
+        <ul>
+          <li>S5 Add button → opens empty form</li>
+          <li>S5 Edit icon → opens pre-filled form</li>
+          <li>Save → returns to S5</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Right: Device Frame -->
+    <div class="device-wrapper">
+      <div class="device-header">
+        <div class="notch"></div>
+        <span class="time" id="mode-label">01:29 PM</span>
+        <div class="status-right">
+          <i class="fa-solid fa-wifi"></i>
+          <i class="fa-solid fa-battery-full"></i>
+        </div>
+      </div>
+
+      <div class="app-screen" style="padding-bottom: 0;">
+
+        <!-- Back header -->
+        <div class="screen-header-back">
+          <a href="../s5_dishes_manager/index.html" class="btn-back">
+            <i class="fa-solid fa-arrow-left"></i>
+          </a>
+          <div class="header-back-title" id="form-screen-title">Add New Dish</div>
+        </div>
+
+        <div class="form-screen">
+          <div class="form-body">
+
+            <div class="form-group">
+              <label class="form-label">Dish Name <span style="color:var(--primary);">*</span></label>
+              <input type="text" class="form-input" id="input-name" placeholder="e.g., Aloo Qeema">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Category <span style="color:var(--primary);">*</span></label>
+              <select class="form-input" id="input-category">
+                <option>Sabzi</option>
+                <option>Daal</option>
+                <option>Chawal</option>
+                <option selected>Gosht</option>
+                <option>Murgh</option>
+                <option>Special</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Ingredients <span style="color:var(--text-muted); font-weight:500; text-transform:none; letter-spacing:0;">(optional)</span></label>
+              <textarea class="form-input" id="input-ingredients" rows="3" style="resize:none;" placeholder="e.g., Chicken, Tomatoes, Onions, Spices…"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Planner Notes <span style="color:var(--text-muted); font-weight:500; text-transform:none; letter-spacing:0;">(optional)</span></label>
+              <textarea class="form-input" id="input-notes" rows="3" style="resize:none;" placeholder="e.g., Marinate overnight. Serve with Naan."></textarea>
+            </div>
+
+          </div>
+
+          <div class="form-footer">
+            <a href="../s5_dishes_manager/index.html" class="btn-primary">
+              <i class="fa-solid fa-circle-check"></i> Save Dish Preset
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="device-footer"></div>
+    </div>
+
+  </div>
+
+  <script>
+    const mode = new URLSearchParams(window.location.search).get('mode');
+    if (mode === 'edit') {
+      document.getElementById('form-screen-title').textContent = 'Edit Preset Dish';
+      document.getElementById('input-name').value = 'Aloo Qeema';
+      document.getElementById('input-ingredients').value = 'Minced Beef (Qeema), Potatoes, Tomatoes, Onions, Green Chillies, Ginger Garlic paste, Garam Masala.';
+      document.getElementById('input-notes').value = 'Perfect with homemade Parathas. Don\'t chop potatoes too big.';
+    }
+  </script>
+</body>
+</html>

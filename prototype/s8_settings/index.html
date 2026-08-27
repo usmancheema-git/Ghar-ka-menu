@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>S8: Settings Wireframe - Ghar ka Menu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+
+<body>
+
+  <div class="wireframe-container">
+
+    <!-- Left Spec Panel -->
+    <div class="spec-panel">
+      <a href="../index.html" class="btn-home-link">
+        <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+      </a>
+      <h1>Household Settings</h1>
+      <span class="screen-badge">Screen S8</span>
+
+      <div class="spec-section">
+        <h3><i class="fa-solid fa-circle-info"></i> Description</h3>
+        <p>Configuration screen for the household — join code, daily alert timing, member roster, and role display.
+          Accessible from the bottom navigation bar by all users.</p>
+      </div>
+
+      <div class="spec-section">
+        <h3><i class="fa-solid fa-bell"></i> FCM Push Alerts</h3>
+        <p>A Supabase Edge Function CRON job runs at the household's configured <code>alert_time</code> every day. It
+          evaluates tomorrow's plan and pushes to all <code>fcm_token</code>s stored in <code>members</code>:</p>
+        <ul>
+          <li><strong>Dish alert</strong> — sent to all members: <em>"Kal: Chicken Biryani — ingredients check kar
+              lo."</em></li>
+          <li><strong>Empty day reminder</strong> — sent to Planner only: <em>"Kal ka menu set nahi hua!"</em></li>
+        </ul>
+      </div>
+
+      <div class="spec-section">
+        <h3><i class="fa-solid fa-share-nodes"></i> Join Code Sharing</h3>
+        <p>The 6-digit code acts as a lightweight invite. The Planner can copy it or trigger a native share intent. No
+          email or password required for onboarding.</p>
+      </div>
+    </div>
+
+    <!-- Right: Device Frame -->
+    <div class="device-wrapper">
+      <div class="device-header">
+        <div class="notch"></div>
+        <span class="time">01:35 PM</span>
+        <div class="status-right">
+          <i class="fa-solid fa-wifi"></i>
+          <i class="fa-solid fa-battery-full"></i>
+        </div>
+      </div>
+
+      <div class="app-screen">
+
+        <!-- Header -->
+        <div class="manager-header">
+          <div class="manager-title">
+            <h2>Settings</h2>
+            <p>Manage household parameters</p>
+          </div>
+        </div>
+
+        <div class="settings-list">
+
+          <!-- Household Info -->
+          <div class="settings-section-title">Household Info</div>
+          <div class="settings-card">
+            <div class="settings-row">
+              <span class="settings-lbl">Household Name</span>
+              <span class="settings-val">Awais Joint Family</span>
+            </div>
+            <div class="settings-row">
+              <span class="settings-lbl">Join Code</span>
+              <span class="settings-val" style="gap:8px;">
+                <span class="code"
+                  style="font-family:monospace; font-size:15px; font-weight:800; color:var(--primary); background:var(--primary-light); padding:2px 8px; border-radius:4px;">482910</span>
+                <i class="fa-solid fa-copy" style="color:var(--text-muted); cursor:pointer; font-size:13px;"></i>
+              </span>
+            </div>
+          </div>
+
+          <!-- Notifications -->
+          <div class="settings-section-title">Notifications</div>
+          <div class="settings-card">
+            <div class="settings-row">
+              <span class="settings-lbl">Next-Day Alert Time</span>
+              <span class="settings-val">
+                <input type="time" class="form-input" value="20:00"
+                  style="padding:4px 8px; width:95px; font-size:12px; text-align:center;">
+              </span>
+            </div>
+          </div>
+
+          <!-- My Role -->
+          <div class="settings-section-title">My Role</div>
+          <div class="settings-card">
+            <div class="settings-row" style="align-items:flex-start; flex-direction:column; gap:8px;">
+              <span class="settings-lbl">Active Role</span>
+              <div style="display:flex; gap:6px; width:100%;">
+                <div
+                  style="flex:1; padding:7px; text-align:center; border-radius:6px; background:var(--primary); color:#fff; font-size:11px; font-weight:700; cursor:pointer;">
+                  <i class="fa-solid fa-crown" style="margin-right:4px;"></i>Planner
+                </div>
+                <div
+                  style="flex:1; padding:7px; text-align:center; border-radius:6px; background:var(--bg-app); color:var(--text-muted); border:1.5px solid var(--border); font-size:11px; font-weight:700; cursor:pointer;">
+                  <i class="fa-solid fa-user" style="margin-right:4px;"></i>Member
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Members List -->
+          <div class="settings-section-title">Family Members (6)</div>
+          <div class="settings-card">
+
+            <div class="member-list-item">
+              <span class="member-item-name">Awais (You)</span>
+              <span class="member-item-role planner">Planner</span>
+            </div>
+            <div class="member-list-item">
+              <span class="member-item-name">Dado</span>
+              <span class="member-item-role planner">Planner</span>
+            </div>
+            <div class="member-list-item">
+              <span class="member-item-name">Maryam</span>
+              <span class="member-item-role member">Member</span>
+            </div>
+            <div class="member-list-item">
+              <span class="member-item-name">Zainab</span>
+              <span class="member-item-role member">Member</span>
+            </div>
+            <div class="member-list-item">
+              <span class="member-item-name">Bilal</span>
+              <span class="member-item-role member">Member</span>
+            </div>
+            <div class="member-list-item">
+              <span class="member-item-name">Ayesha</span>
+              <span class="member-item-role member">Member</span>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Bottom Nav -->
+      <div class="bottom-nav">
+        <a href="../s2_week_view/index.html" class="nav-item">
+          <i class="fa-solid fa-calendar-days"></i><span>Week Plan</span>
+        </a>
+        <a href="../s5_dishes_manager/index.html" class="nav-item">
+          <i class="fa-solid fa-utensils"></i><span>Dishes</span>
+        </a>
+        <a href="../s7_history/index.html" class="nav-item">
+          <i class="fa-solid fa-clock-rotate-left"></i><span>History</span>
+        </a>
+        <a href="../s8_settings/index.html" class="nav-item active">
+          <i class="fa-solid fa-sliders"></i><span>Settings</span>
+        </a>
+      </div>
+
+      <div class="device-footer"></div>
+    </div>
+
+  </div>
+
+</body>
+
+</html>

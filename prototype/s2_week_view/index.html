@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>S2: Week View Wireframe - Ghar ka Menu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .role-switcher {
+      display: flex;
+      background: #1C1C1F;
+      border-radius: var(--radius-sm);
+      padding: 3px;
+      border: 1px solid #2D2D30;
+      margin-top: 8px;
+    }
+    .role-tab {
+      flex: 1;
+      text-align: center;
+      padding: 7px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #A0A0A5;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: var(--transition);
+    }
+    .role-tab.active {
+      background: var(--primary);
+      color: #FFF;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wireframe-container">
+
+    <!-- Left Spec Panel -->
+    <div class="spec-panel">
+      <a href="../index.html" class="btn-home-link">
+        <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+      </a>
+      <h1>Week View (Home)</h1>
+      <span class="screen-badge">Screen S2</span>
+
+      <div class="spec-section">
+        <h3><i class="fa-solid fa-circle-info"></i> Description</h3>
+        <p>The home screen of the app. Shows a rolling 7-day lunch plan — today highlighted with a terracotta border, each future day showing its assigned dish or an empty placeholder.</p>
+      </div>
+
+      <div class="spec-section">
+        <h3><i class="fa-solid fa-user-shield"></i> Role Switcher</h3>
+        <p>Toggle below to simulate how the interface adapts for each role:</p>
+        <div class="role-switcher">
+          <div class="role-tab active" id="tab-planner" onclick="switchRole('planner')">Planner</div>
+          <div class="role-tab"          id="tab-member" onclick="switchRole('member')">Member</div>
+        </div>
+        <ul style="margin-top:12px;">
+          <li><strong>Planner</strong>: sees <code>+</code> button on empty days and <code>⋮</code> menu on filled days to toggle status.</li>
+          <li><strong>Member</strong>: read-only; tap card → S4 Dish Detail.</li>
+        </ul>
+      </div>
+
+      <div class="spec-section">
+        <h3><i class="fa-solid fa-lightbulb"></i> Status Pills</h3>
+        <ul>
+          <li><span style="background:#E6F7FF;color:#1890FF;padding:1px 6px;border-radius:4px;font-size:11px;font-weight:700;">PLANNED</span> — upcoming, ready to serve</li>
+          <li><span style="background:#EEF6F1;color:#4A7C59;padding:1px 6px;border-radius:4px;font-size:11px;font-weight:700;">COOKED</span> — served, history updated</li>
+          <li><span style="background:#FFF1F0;color:#FF4D4F;padding:1px 6px;border-radius:4px;font-size:11px;font-weight:700;">CANCELLED</span> — skipped (guests, dining out)</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Right: Device Frame -->
+    <div class="device-wrapper">
+      <div class="device-header">
+        <div class="notch"></div>
+        <span class="time">01:15 PM</span>
+        <div class="status-right">
+          <i class="fa-solid fa-wifi"></i>
+          <i class="fa-solid fa-battery-full"></i>
+        </div>
+      </div>
+
+      <div class="app-screen">
+
+        <!-- Header Row -->
+        <div class="week-header">
+          <div class="week-title-area">
+            <h2>Awais Family</h2>
+            <p>Rolling 7-Day Lunch Plan</p>
+          </div>
+          <div class="role-badge planner" id="role-pill">
+            <i class="fa-solid fa-crown"></i> Planner
+          </div>
+        </div>
+
+        <div class="week-list">
+
+          <!-- Day 1: Today — Cooked -->
+          <div class="day-card today">
+            <div class="day-info">
+              <div class="day-name">Fri</div>
+              <div class="day-date">18</div>
+              <span class="day-status-pill cooked">Cooked</span>
+            </div>
+            <div class="dish-content">
+              <span class="dish-category">Sabzi</span>
+              <span class="dish-name">Bhindi Masala</span>
+              <span class="dish-notes"><i class="fa-solid fa-note-sticky"></i> Don't cover the pan while cooking.</span>
+            </div>
+            <div class="day-actions planner-ctrl">
+              <div class="day-action-btn"><i class="fa-solid fa-ellipsis-vertical"></i></div>
+            </div>
+            <a href="../s4_dish_detail/index.html" class="day-actions member-ctrl" style="display:none; text-decoration:none; color:inherit;">
+              <div class="day-action-btn"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+          </div>
+
+          <!-- Day 2: Tomorrow — Planned -->
+          <div class="day-card">
+            <div class="day-info">
+              <div class="day-name">Sat</div>
+              <div class="day-date">19</div>
+              <span class="day-status-pill planned">Planned</span>
+            </div>
+            <div class="dish-content">
+              <span class="dish-category">Chawal</span>
+              <span class="dish-name">Chicken Biryani</span>
+              <span class="dish-notes"><i class="fa-solid fa-note-sticky"></i> Marinate chicken 2 hrs early.</span>
+            </div>
+            <div class="day-actions planner-ctrl">
+              <div class="day-action-btn"><i class="fa-solid fa-ellipsis-vertical"></i></div>
+            </div>
+            <a href="../s4_dish_detail/index.html" class="day-actions member-ctrl" style="display:none; text-decoration:none; color:inherit;">
+              <div class="day-action-btn"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+          </div>
+
+          <!-- Day 3: Empty — No dish assigned -->
+          <div class="day-card" id="empty-card">
+            <div class="day-info">
+              <div class="day-name">Sun</div>
+              <div class="day-date">20</div>
+            </div>
+            <div class="dish-content">
+              <span class="dish-empty">Menu not decided yet</span>
+            </div>
+            <a href="../s3_assign_dish/index.html" class="day-actions planner-ctrl" style="text-decoration:none; color:inherit;">
+              <div class="day-action-btn" style="background:var(--primary);color:#fff;border-color:var(--primary);">
+                <i class="fa-solid fa-plus"></i>
+              </div>
+            </a>
+          </div>
+
+          <!-- Day 4: Planned -->
+          <div class="day-card">
+            <div class="day-info">
+              <div class="day-name">Mon</div>
+              <div class="day-date">21</div>
+              <span class="day-status-pill planned">Planned</span>
+            </div>
+            <div class="dish-content">
+              <span class="dish-category">Daal</span>
+              <span class="dish-name">Daal Mash (Fry)</span>
+            </div>
+            <div class="day-actions planner-ctrl">
+              <div class="day-action-btn"><i class="fa-solid fa-ellipsis-vertical"></i></div>
+            </div>
+            <a href="../s4_dish_detail/index.html" class="day-actions member-ctrl" style="display:none; text-decoration:none; color:inherit;">
+              <div class="day-action-btn"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+          </div>
+
+          <!-- Day 5: Cancelled -->
+          <div class="day-card">
+            <div class="day-info">
+              <div class="day-name">Tue</div>
+              <div class="day-date">22</div>
+              <span class="day-status-pill cancelled">Cancelled</span>
+            </div>
+            <div class="dish-content">
+              <span class="dish-category">Murgh</span>
+              <span class="dish-name">Chicken Karahi</span>
+              <span class="dish-notes"><i class="fa-solid fa-note-sticky"></i> Skipped — guests came.</span>
+            </div>
+            <div class="day-actions planner-ctrl">
+              <div class="day-action-btn"><i class="fa-solid fa-ellipsis-vertical"></i></div>
+            </div>
+            <a href="../s4_dish_detail/index.html" class="day-actions member-ctrl" style="display:none; text-decoration:none; color:inherit;">
+              <div class="day-action-btn"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+          </div>
+
+          <!-- Day 6: Empty -->
+          <div class="day-card">
+            <div class="day-info">
+              <div class="day-name">Wed</div>
+              <div class="day-date">23</div>
+            </div>
+            <div class="dish-content">
+              <span class="dish-empty">Menu not decided yet</span>
+            </div>
+            <a href="../s3_assign_dish/index.html" class="day-actions planner-ctrl" style="text-decoration:none; color:inherit;">
+              <div class="day-action-btn" style="background:var(--primary);color:#fff;border-color:var(--primary);">
+                <i class="fa-solid fa-plus"></i>
+              </div>
+            </a>
+          </div>
+
+          <!-- Day 7: Planned -->
+          <div class="day-card">
+            <div class="day-info">
+              <div class="day-name">Thu</div>
+              <div class="day-date">24</div>
+              <span class="day-status-pill planned">Planned</span>
+            </div>
+            <div class="dish-content">
+              <span class="dish-category">Gosht</span>
+              <span class="dish-name">Aloo Qeema</span>
+            </div>
+            <div class="day-actions planner-ctrl">
+              <div class="day-action-btn"><i class="fa-solid fa-ellipsis-vertical"></i></div>
+            </div>
+            <a href="../s4_dish_detail/index.html" class="day-actions member-ctrl" style="display:none; text-decoration:none; color:inherit;">
+              <div class="day-action-btn"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+          </div>
+
+        </div><!-- /week-list -->
+      </div><!-- /app-screen -->
+
+      <!-- Bottom Navigation -->
+      <div class="bottom-nav">
+        <a href="../s2_week_view/index.html" class="nav-item active">
+          <i class="fa-solid fa-calendar-days"></i><span>Week Plan</span>
+        </a>
+        <a href="../s5_dishes_manager/index.html" class="nav-item">
+          <i class="fa-solid fa-utensils"></i><span>Dishes</span>
+        </a>
+        <a href="../s7_history/index.html" class="nav-item">
+          <i class="fa-solid fa-clock-rotate-left"></i><span>History</span>
+        </a>
+        <a href="../s8_settings/index.html" class="nav-item">
+          <i class="fa-solid fa-sliders"></i><span>Settings</span>
+        </a>
+      </div>
+
+      <div class="device-footer"></div>
+    </div>
+
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const init = urlParams.get('role') || 'planner';
+    switchRole(init);
+
+    function switchRole(role) {
+      document.getElementById('tab-planner').classList.toggle('active', role === 'planner');
+      document.getElementById('tab-member').classList.toggle('active', role === 'member');
+      const pill = document.getElementById('role-pill');
+      if (role === 'planner') {
+        pill.className = 'role-badge planner';
+        pill.innerHTML = '<i class="fa-solid fa-crown"></i> Planner';
+        document.querySelectorAll('.planner-ctrl').forEach(e => e.style.display = 'flex');
+        document.querySelectorAll('.member-ctrl').forEach(e => e.style.display = 'none');
+      } else {
+        pill.className = 'role-badge member';
+        pill.innerHTML = '<i class="fa-solid fa-user"></i> Member';
+        document.querySelectorAll('.planner-ctrl').forEach(e => e.style.display = 'none');
+        document.querySelectorAll('.member-ctrl').forEach(e => e.style.display = 'flex');
+      }
+    }
+  </script>
+</body>
+</html>

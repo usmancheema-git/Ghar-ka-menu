@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>S1: Onboarding Wireframe - Ghar ka Menu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+
+  <div class="wireframe-container">
+    
+    <!-- Left Specifications Panel -->
+    <div class="spec-panel">
+      <a href="../index.html" class="btn-home-link">
+        <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+      </a>
+      <h1>Onboarding Screen</h1>
+      <span class="screen-badge">Screen S1</span>
+      
+      <div class="spec-section">
+        <h3><i class="fa-solid fa-circle-info"></i> Description</h3>
+        <p>This is the first screen a user sees if they have not joined a household yet. It uses a clean selection flow to guide planners and members without cluttering the mobile interface.</p>
+      </div>
+
+      <div class="spec-section">
+        <h3><i class="fa-brands fa-google"></i> Google Sign-In</h3>
+        <p>Users first sign in with their Google account. After authentication, they proceed to either <strong>Create New Household</strong> or <strong>Join Existing Code</strong>. The form dynamically slides in, ensuring perfect alignment.</p>
+      </div>
+
+      <div class="spec-section">
+        <h3><i class="fa-solid fa-database"></i> Database Connections</h3>
+        <p>Inserts a row into the <code>households</code> table if creating, or associates a row in <code>members</code> linking to the specified household code.</p>
+      </div>
+    </div>
+
+    <!-- Right Mockup Screen -->
+    <div class="device-wrapper">
+      <div class="device-header">
+        <div class="notch"></div>
+        <div class="time">12:30 PM</div>
+        <div class="status-right">
+          <i class="fa-solid fa-wifi"></i>
+          <i class="fa-solid fa-battery-full"></i>
+        </div>
+      </div>
+      
+      <div class="app-screen" style="padding-bottom: 20px;">
+        <div class="onboarding-screen">
+          <div class="brand-section">
+            <div class="brand-logo">
+              <i class="fa-solid fa-utensils" style="color: var(--primary);"></i>
+            </div>
+            <div class="brand-title">Ghar ka Menu</div>
+            <div class="brand-tagline">Joint family lunch planner</div>
+          </div>
+          
+          <!-- Step 1: Google Sign In -->
+          <div id="ob-signin" style="margin-top: 30px; margin-bottom: 20px;">
+            <button class="btn-google-signin" onclick="signInWithGoogle()">
+              <svg width="18" height="18" viewBox="0 0 48 48">
+                <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+              </svg>
+              Sign in with Google
+            </button>
+            <div class="text-divider" style="margin-top: 14px;">secure authentication</div>
+          </div>
+
+          <!-- Step 2: Choices Panel (hidden until signed in) -->
+          <div id="ob-choices" style="display: none; margin-top: 20px; margin-bottom: 20px;">
+            <div class="signed-in-bar">
+              <div class="signed-in-avatar">A</div>
+              <div class="signed-in-info">
+                <div class="signed-in-name">Awais</div>
+                <div class="signed-in-email">awais@gmail.com</div>
+              </div>
+              <i class="fa-solid fa-circle-check" style="color: var(--secondary); font-size: 16px;"></i>
+            </div>
+            <button class="btn-primary" onclick="showOnboardForm('create')" style="margin-bottom: 16px; width: 100%; height: 50px;">
+              <i class="fa-solid fa-house-chimney-user" style="margin-right: 6px;"></i> Create New Household
+            </button>
+            <button class="btn-secondary" onclick="showOnboardForm('join')" style="width: 100%; height: 50px;">
+              <i class="fa-solid fa-key" style="margin-right: 6px;"></i> Join Existing Code
+            </button>
+          </div>
+          
+          <!-- Create Household Form -->
+          <div class="onboarding-card" id="ob-form-create" style="display: none; margin-top: 20px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+              <h3 style="font-family: var(--font-title); font-size: 14px; display:flex; align-items:center; gap:6px;">
+                <i class="fa-solid fa-circle-plus" style="color: var(--primary);"></i> Setup Household
+              </h3>
+              <span onclick="showChoices()" style="font-size:11px; font-weight:700; color:var(--primary); cursor:pointer; display:flex; align-items:center; gap:3px;"><i class="fa-solid fa-chevron-left"></i> Back</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Household Name</label>
+              <input type="text" class="form-input" placeholder="e.g., Awais Joint Family" value="Awais Family">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Your Name</label>
+              <input type="text" class="form-input" placeholder="e.g., Awais" value="Awais">
+            </div>
+            <a href="../s2_week_view/index.html?role=planner" class="btn-primary">
+              Create & Plan Menu <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+          
+          <!-- Join Household Form -->
+          <div class="onboarding-card" id="ob-form-join" style="display: none; margin-top: 20px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+              <h3 style="font-family: var(--font-title); font-size: 14px; display:flex; align-items:center; gap:6px;">
+                <i class="fa-solid fa-key" style="color: var(--secondary);"></i> Join Code
+              </h3>
+              <span onclick="showChoices()" style="font-size:11px; font-weight:700; color:var(--text-muted); cursor:pointer; display:flex; align-items:center; gap:3px;"><i class="fa-solid fa-chevron-left"></i> Back</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">6-Digit Code</label>
+              <input type="text" class="form-input" placeholder="e.g., 482910">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Your Name</label>
+              <input type="text" class="form-input" placeholder="e.g., Maryam">
+            </div>
+            <a href="../s2_week_view/index.html?role=member" class="btn-secondary">
+              Join Household
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="device-footer"></div>
+    </div>
+
+  </div>
+
+  <script>
+    function signInWithGoogle() {
+      document.getElementById('ob-signin').style.display = 'none';
+      document.getElementById('ob-choices').style.display = 'block';
+    }
+
+    function showOnboardForm(type) {
+      document.getElementById('ob-choices').style.display = 'none';
+      if (type === 'create') {
+        document.getElementById('ob-form-create').style.display = 'block';
+        document.getElementById('ob-form-join').style.display = 'none';
+      } else {
+        document.getElementById('ob-form-create').style.display = 'none';
+        document.getElementById('ob-form-join').style.display = 'block';
+      }
+    }
+
+    function showChoices() {
+      document.getElementById('ob-choices').style.display = 'block';
+      document.getElementById('ob-form-create').style.display = 'none';
+      document.getElementById('ob-form-join').style.display = 'none';
+    }
+  </script>
+</body>
+</html>

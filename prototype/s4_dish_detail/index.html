@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>S4: Dish Profile Wireframe - Ghar ka Menu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+
+  <div class="wireframe-container">
+
+    <!-- Left Spec Panel -->
+    <div class="spec-panel">
+      <a href="../index.html" class="btn-home-link">
+        <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+      </a>
+      <h1>Dish Profile</h1>
+      <span class="screen-badge">Screen S4</span>
+
+      <div class="spec-section">
+        <h3><i class="fa-solid fa-circle-info"></i> Description</h3>
+        <p>Information screen for a single dish. Accessible to both Planners and Members. Opened by tapping a day card in S2 (member mode) or a dish row in S5 (dishes manager).</p>
+      </div>
+
+      <div class="spec-section">
+        <h3><i class="fa-solid fa-chart-simple"></i> Tracked Metrics</h3>
+        <ul>
+          <li><strong>Last Cooked</strong> — days elapsed since last serving. Powers the rotation score on S3.</li>
+          <li><strong>Times Cooked</strong> — cumulative cook count, auto-incremented on day rollover.</li>
+        </ul>
+      </div>
+
+      <div class="spec-section">
+        <h3><i class="fa-solid fa-clipboard-list"></i> v1 Scope Note</h3>
+        <p>Ingredients and notes are <em>plain read-only text</em>. Grocery checklists, ingredient quantities, and recipe steps are out of scope for v1 and are v2 candidates.</p>
+      </div>
+
+      <div class="spec-section">
+        <h3><i class="fa-solid fa-link"></i> Entry Points</h3>
+        <ul>
+          <li>S2 Week View → tap a dish card (member)</li>
+          <li>S5 Dishes Manager → tap a dish row</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Right: Device Frame -->
+    <div class="device-wrapper">
+      <div class="device-header">
+        <div class="notch"></div>
+        <span class="time">01:22 PM</span>
+        <div class="status-right">
+          <i class="fa-solid fa-wifi"></i>
+          <i class="fa-solid fa-battery-full"></i>
+        </div>
+      </div>
+
+      <div class="app-screen" style="padding-bottom: 0;">
+
+        <!-- Back header -->
+        <div class="screen-header-back">
+          <a href="../s2_week_view/index.html" class="btn-back">
+            <i class="fa-solid fa-arrow-left"></i>
+          </a>
+          <div class="header-back-title">Dish Profile</div>
+        </div>
+
+        <!-- Coloured cover band -->
+        <div class="detail-header-cover">
+          <span class="detail-cat-tag">Chawal</span>
+        </div>
+
+        <!-- Body -->
+        <div class="detail-body">
+
+          <div class="detail-title">Chicken Biryani</div>
+
+          <!-- Stats row -->
+          <div class="detail-stats">
+            <div class="stat-box">
+              <div class="stat-val">12 days ago</div>
+              <div class="stat-lbl">Last Cooked</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-val">8 times</div>
+              <div class="stat-lbl">Times Cooked</div>
+            </div>
+          </div>
+
+          <!-- Ingredients -->
+          <div class="detail-section">
+            <div class="detail-section-title">Ingredients</div>
+            <div class="detail-text">
+              Chicken (1 kg), Basmati Rice (750 g), Yogurt, Fried Onions, Biryani Masala, Fresh Mint, Coriander, Green Chillies, Tomatoes, Garlic &amp; Ginger paste.
+            </div>
+          </div>
+
+          <!-- Notes -->
+          <div class="detail-section">
+            <div class="detail-section-title">Planner Notes</div>
+            <div class="detail-text">
+              Dado's recipe. Marinate chicken for at least 2 hours before cooking. Always serve with mint raita.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="device-footer"></div>
+    </div>
+
+  </div>
+
+</body>
+</html>

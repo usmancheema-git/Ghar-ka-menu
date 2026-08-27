@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>S7: History Wireframe - Ghar ka Menu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+
+  <div class="wireframe-container">
+
+    <!-- Left Spec Panel -->
+    <div class="spec-panel">
+      <a href="../index.html" class="btn-home-link">
+        <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+      </a>
+      <h1>30-Day History</h1>
+      <span class="screen-badge">Screen S7</span>
+
+      <div class="spec-section">
+        <h3><i class="fa-solid fa-circle-info"></i> Description</h3>
+        <p>A chronological log of all past lunch records for the household. Resolves the classic family argument: <em>"pichle hafte bhi to yehi bana tha!"</em> — by showing an objective record.</p>
+      </div>
+
+      <div class="spec-section">
+        <h3><i class="fa-solid fa-rotate-left"></i> Auto Rollover Logic</h3>
+        <p>At midnight a server-side function checks yesterday's <code>day_plans</code> row. If status is still <code>planned</code>, it is automatically updated to <code>cooked</code> and the dish's <code>last_cooked_on</code> &amp; <code>times_cooked</code> counters are incremented.</p>
+      </div>
+
+      <div class="spec-section">
+        <h3><i class="fa-solid fa-database"></i> Data Source</h3>
+        <p>Reads from <code>day_plans</code> table where <code>date &lt; today</code>, ordered by date <strong>DESC</strong>. Both Planners and Members can view this screen.</p>
+      </div>
+
+      <div class="spec-section">
+        <h3><i class="fa-solid fa-tag"></i> Entry Status Legend</h3>
+        <ul>
+          <li><span style="background:#EEF6F1;color:#4A7C59;padding:1px 6px;border-radius:4px;font-size:11px;font-weight:700;">SERVED</span> — dish was cooked and served.</li>
+          <li><span style="background:#FFF1F0;color:#FF4D4F;padding:1px 6px;border-radius:4px;font-size:11px;font-weight:700;">CANCELLED</span> — planner manually marked as skipped.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Right: Device Frame -->
+    <div class="device-wrapper">
+      <div class="device-header">
+        <div class="notch"></div>
+        <span class="time">01:32 PM</span>
+        <div class="status-right">
+          <i class="fa-solid fa-wifi"></i>
+          <i class="fa-solid fa-battery-full"></i>
+        </div>
+      </div>
+
+      <div class="app-screen">
+
+        <!-- Header -->
+        <div class="manager-header">
+          <div class="manager-title">
+            <h2>30-Day History</h2>
+            <p>Past lunch records</p>
+          </div>
+        </div>
+
+        <!-- Log list -->
+        <div class="history-list">
+
+          <div class="history-card">
+            <div class="history-info">
+              <div class="history-dish-name">Daal Chawal Combo</div>
+              <div class="history-date">16 July 2026 · Chawal</div>
+            </div>
+            <div class="history-badge">Served</div>
+          </div>
+
+          <div class="history-card">
+            <div class="history-info">
+              <div class="history-dish-name">Aloo Gobi</div>
+              <div class="history-date">15 July 2026 · Sabzi</div>
+            </div>
+            <div class="history-badge">Served</div>
+          </div>
+
+          <div class="history-card">
+            <div class="history-info">
+              <div class="history-dish-name">Bhindi Masala</div>
+              <div class="history-date">14 July 2026 · Sabzi</div>
+            </div>
+            <div class="history-badge">Served</div>
+          </div>
+
+          <div class="history-card">
+            <div class="history-info">
+              <div class="history-dish-name">Chicken Korma</div>
+              <div class="history-date">13 July 2026 · Murgh</div>
+            </div>
+            <div class="history-badge">Served</div>
+          </div>
+
+          <div class="history-card">
+            <div class="history-info">
+              <div class="history-dish-name">Beef Nihari</div>
+              <div class="history-date">12 July 2026 · Gosht</div>
+            </div>
+            <div class="history-badge" style="background:#FFF1F0; color:#FF4D4F;">Cancelled</div>
+          </div>
+
+          <div class="history-card">
+            <div class="history-info">
+              <div class="history-dish-name">Daal Mash (Fry)</div>
+              <div class="history-date">11 July 2026 · Daal</div>
+            </div>
+            <div class="history-badge">Served</div>
+          </div>
+
+          <div class="history-card">
+            <div class="history-info">
+              <div class="history-dish-name">Mix Sabzi</div>
+              <div class="history-date">10 July 2026 · Sabzi</div>
+            </div>
+            <div class="history-badge">Served</div>
+          </div>
+
+          <div class="history-card">
+            <div class="history-info">
+              <div class="history-dish-name">Chicken Biryani</div>
+              <div class="history-date">9 July 2026 · Chawal</div>
+            </div>
+            <div class="history-badge">Served</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Bottom Nav -->
+      <div class="bottom-nav">
+        <a href="../s2_week_view/index.html" class="nav-item">
+          <i class="fa-solid fa-calendar-days"></i><span>Week Plan</span>
+        </a>
+        <a href="../s5_dishes_manager/index.html" class="nav-item">
+          <i class="fa-solid fa-utensils"></i><span>Dishes</span>
+        </a>
+        <a href="../s7_history/index.html" class="nav-item active">
+          <i class="fa-solid fa-clock-rotate-left"></i><span>History</span>
+        </a>
+        <a href="../s8_settings/index.html" class="nav-item">
+          <i class="fa-solid fa-sliders"></i><span>Settings</span>
+        </a>
+      </div>
+
+      <div class="device-footer"></div>
+    </div>
+
+  </div>
+
+</body>
+</html>

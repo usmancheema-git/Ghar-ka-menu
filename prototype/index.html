@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ghar ka Menu - Interactive Wireframes Dashboard</title>
+  
+  <!-- Font Families -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="brand-logo" style="margin-bottom: 20px; width: 64px; height: 64px;">
+    <i class="fa-solid fa-utensils" style="color: var(--primary);"></i>
+  </div>
+  
+  <h1 class="dashboard-title">Ghar ka Menu</h1>
+  <p class="dashboard-desc">
+    Interactive wireframe mockups for a joint family's shared lunch menu planner app. Explore the 8 screens, user roles (Planner vs. Member), and recommendation sorting rules.
+  </p>
+
+  <div class="wireframe-grid">
+    
+    <!-- Screen 1 Card -->
+    <a href="s1_onboarding/index.html" class="grid-card">
+      <div>
+        <div class="grid-card-header">
+          <span class="grid-card-num">S1</span>
+          <span class="grid-card-type">Flow Start</span>
+        </div>
+        <div class="grid-card-title">Onboarding Screen</div>
+        <div class="grid-card-desc">Household join code model. Planner sets up a household while member enters a 6-digit code. No complex login.</div>
+      </div>
+      <div class="grid-card-footer">
+        View Onboarding Wireframe <i class="fa-solid fa-arrow-right-long"></i>
+      </div>
+    </a>
+
+    <!-- Screen 2 Card -->
+    <a href="s2_week_view/index.html" class="grid-card">
+      <div>
+        <div class="grid-card-header">
+          <span class="grid-card-num">S2</span>
+          <span class="grid-card-type">Home View</span>
+        </div>
+        <div class="grid-card-title">Week View (Home)</div>
+        <div class="grid-card-desc">Rolling 7-day layout (today + next 6 days) representing daily meals. Highlighting today's status and planner controls.</div>
+      </div>
+      <div class="grid-card-footer">
+        View Week View Wireframe <i class="fa-solid fa-arrow-right-long"></i>
+      </div>
+    </a>
+
+    <!-- Screen 3 Card -->
+    <a href="s3_assign_dish/index.html" class="grid-card">
+      <div>
+        <div class="grid-card-header">
+          <span class="grid-card-num">S3</span>
+          <span class="grid-card-type">Planner Flow</span>
+        </div>
+        <div class="grid-card-title">Assign Dish Screen</div>
+        <div class="grid-card-desc">Category tab filters with smart sorting based on days since cooked DESC and repeat warnings for recently cooked dishes.</div>
+      </div>
+      <div class="grid-card-footer">
+        View Assign Wireframe <i class="fa-solid fa-arrow-right-long"></i>
+      </div>
+    </a>
+
+    <!-- Screen 4 Card -->
+    <a href="s4_dish_detail/index.html" class="grid-card">
+      <div>
+        <div class="grid-card-header">
+          <span class="grid-card-num">S4</span>
+          <span class="grid-card-type">Information</span>
+        </div>
+        <div class="grid-card-title">Dish Profile / Detail</div>
+        <div class="grid-card-desc">Detailed recipe parameters, category labels, ingredient lists, prep notes, last cooked math, and counter metrics.</div>
+      </div>
+      <div class="grid-card-footer">
+        View Detail Wireframe <i class="fa-solid fa-arrow-right-long"></i>
+      </div>
+    </a>
+
+    <!-- Screen 5 Card -->
+    <a href="s5_dishes_manager/index.html" class="grid-card">
+      <div>
+        <div class="grid-card-header">
+          <span class="grid-card-num">S5</span>
+          <span class="grid-card-type">CRUD Dashboard</span>
+        </div>
+        <div class="grid-card-title">Dishes Manager</div>
+        <div class="grid-card-desc">Searchable list of all dishes grouped by category. Planners can edit, add, or delete dish presets.</div>
+      </div>
+      <div class="grid-card-footer">
+        View Manager Wireframe <i class="fa-solid fa-arrow-right-long"></i>
+      </div>
+    </a>
+
+    <!-- Screen 6 Card -->
+    <a href="s6_add_edit_dish/index.html" class="grid-card">
+      <div>
+        <div class="grid-card-header">
+          <span class="grid-card-num">S6</span>
+          <span class="grid-card-type">Form Control</span>
+        </div>
+        <div class="grid-card-title">Add / Edit Dish Form</div>
+        <div class="grid-card-desc">Create or edit dish metadata including title, category tags, ingredients text list, and preparation reminders.</div>
+      </div>
+      <div class="grid-card-footer">
+        View Form Wireframe <i class="fa-solid fa-arrow-right-long"></i>
+      </div>
+    </a>
+
+    <!-- Screen 7 Card -->
+    <a href="s7_history/index.html" class="grid-card">
+      <div>
+        <div class="grid-card-header">
+          <span class="grid-card-num">S7</span>
+          <span class="grid-card-type">Logs Tracker</span>
+        </div>
+        <div class="grid-card-title">30-Day History Logs</div>
+        <div class="grid-card-desc">Scrollable record of past cooked dishes. Includes rollover completion state updates and skipped/cancelled entries.</div>
+      </div>
+      <div class="grid-card-footer">
+        View History Wireframe <i class="fa-solid fa-arrow-right-long"></i>
+      </div>
+    </a>
+
+    <!-- Screen 8 Card -->
+    <a href="s8_settings/index.html" class="grid-card">
+      <div>
+        <div class="grid-card-header">
+          <span class="grid-card-num">S8</span>
+          <span class="grid-card-type">Configuration</span>
+        </div>
+        <div class="grid-card-title">Household Settings</div>
+        <div class="grid-card-desc">Review join code, configure daily menu alerts, toggle interactive user role (Planner/Member), and manage household members.</div>
+      </div>
+      <div class="grid-card-footer">
+        View Settings Wireframe <i class="fa-solid fa-arrow-right-long"></i>
+      </div>
+    </a>
+
+  </div>
+
+</body>
+</html>
