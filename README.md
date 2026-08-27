@@ -33,6 +33,18 @@ The v1 specification and HTML/CSS screen prototypes are complete. The Flutter im
 
 These screens currently run with an in-memory mock store while Supabase integration is being completed. S7 History and S8 Settings are still planned.
 
+## Screenshots
+
+The following screens come from the project's HTML/CSS prototypes and represent the intended mobile experience.
+
+| Onboarding | Week View |
+| --- | --- |
+| ![Ghar ka Menu onboarding screen](screenshots/onboarding.png) | ![Ghar ka Menu week view](screenshots/week-view.png) |
+
+| Dishes Manager |
+| --- |
+| ![Ghar ka Menu dishes manager](screenshots/dishes-manager.png) |
+
 ## Technology
 
 - Flutter and Dart
