@@ -7,22 +7,36 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
   final AuthRepository _authRepository;
 
   OnboardingBloc({required AuthRepository authRepository})
-      // ignore: prefer_initializing_formals
-      : _authRepository = authRepository,
-        super(OnboardingInitial()) {
-    on<SignInWithGoogleRequested>(_onSignInWithGoogle);
+    // ignore: prefer_initializing_formals
+    : _authRepository = authRepository,
+      super(OnboardingInitial()) {
+    on<SignInWithEmailRequested>(_onSignInWithEmail);
     on<CreateHouseholdRequested>(_onCreateHousehold);
     on<JoinHouseholdRequested>(_onJoinHousehold);
   }
 
-  Future<void> _onSignInWithGoogle(
-    SignInWithGoogleRequested event,
+  Future<void> _onSignInWithEmail(
+    SignInWithEmailRequested event,
     Emitter<OnboardingState> emit,
   ) async {
+    if (event.email.trim().isEmpty || event.password.length < 6) {
+      emit(
+        const OnboardingError(
+          'Enter a valid email and a password of at least 6 characters.',
+        ),
+      );
+      return;
+    }
+
     emit(OnboardingLoading());
     try {
-      await _authRepository.signInWithGoogle();
-      emit(OnboardingAuthenticated());
+      await _authRepository.authenticateWithEmail(
+        event.email,
+        event.password,
+        createAccount: event.createAccount,
+      );
+      final hasHousehold = await _authRepository.restoreSession();
+      emit(hasHousehold ? OnboardingSuccess() : OnboardingAuthenticated());
     } catch (e) {
       emit(OnboardingError(e.toString()));
     }
@@ -37,10 +51,13 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
       emit(OnboardingAuthenticated()); // Reset back to form
       return;
     }
-    
+
     emit(OnboardingLoading());
     try {
-      await _authRepository.createHousehold(event.householdName, event.userName);
+      await _authRepository.createHousehold(
+        event.householdName,
+        event.userName,
+      );
       emit(OnboardingSuccess());
     } catch (e) {
       emit(OnboardingError(e.toString()));
@@ -53,11 +70,15 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
     Emitter<OnboardingState> emit,
   ) async {
     if (event.joinCode.length != 6 || event.userName.isEmpty) {
-      emit(const OnboardingError("Join code must be 6 digits and name cannot be empty."));
+      emit(
+        const OnboardingError(
+          "Join code must be 6 digits and name cannot be empty.",
+        ),
+      );
       emit(OnboardingAuthenticated()); // Reset back to form
       return;
     }
-    
+
     emit(OnboardingLoading());
     try {
       await _authRepository.joinHousehold(event.joinCode, event.userName);

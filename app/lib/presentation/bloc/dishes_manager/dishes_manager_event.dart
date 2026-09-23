@@ -15,6 +15,15 @@ class LoadDishesManager extends DishesManagerEvent {
   List<Object?> get props => [householdId];
 }
 
+class ReloadDishesManager extends DishesManagerEvent {
+  final String householdId;
+
+  const ReloadDishesManager({required this.householdId});
+
+  @override
+  List<Object?> get props => [householdId];
+}
+
 class FilterManagerByCategory extends DishesManagerEvent {
   final String? categoryId; // null means 'All'
   const FilterManagerByCategory(this.categoryId);

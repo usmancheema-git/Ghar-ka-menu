@@ -65,29 +65,31 @@ class DishesManagerLoaded extends DishesManagerState {
       allDishes: allDishes ?? this.allDishes,
       filteredDishes: filteredDishes ?? this.filteredDishes,
       categories: categories ?? this.categories,
-      selectedCategoryId:
-          clearCategory ? null : (selectedCategoryId ?? this.selectedCategoryId),
+      selectedCategoryId: clearCategory
+          ? null
+          : (selectedCategoryId ?? this.selectedCategoryId),
       searchQuery: searchQuery ?? this.searchQuery,
       scheduledDishIds: scheduledDishIds ?? this.scheduledDishIds,
       userRole: userRole ?? this.userRole,
-      deletingDishId:
-          clearDeletingDishId ? null : (deletingDishId ?? this.deletingDishId),
+      deletingDishId: clearDeletingDishId
+          ? null
+          : (deletingDishId ?? this.deletingDishId),
       actionError: clearActionError ? null : (actionError ?? this.actionError),
     );
   }
 
   @override
   List<Object?> get props => [
-        allDishes,
-        filteredDishes,
-        categories,
-        selectedCategoryId,
-        searchQuery,
-        scheduledDishIds,
-        userRole,
-        deletingDishId,
-        actionError,
-      ];
+    allDishes,
+    filteredDishes,
+    categories,
+    selectedCategoryId,
+    searchQuery,
+    scheduledDishIds,
+    userRole,
+    deletingDishId,
+    actionError,
+  ];
 }
 
 class DishesManagerError extends DishesManagerState {

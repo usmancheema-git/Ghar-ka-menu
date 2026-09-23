@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../data/mock/mock_household_store.dart';
 import '../../../data/models/dish_model.dart';
@@ -7,12 +9,14 @@ import 'dishes_manager_state.dart';
 
 class DishesManagerBloc extends Bloc<DishesManagerEvent, DishesManagerState> {
   final DishesManagerRepository _repository;
+  StreamSubscription<void>? _changesSubscription;
 
   DishesManagerBloc({required DishesManagerRepository repository})
-      // ignore: prefer_initializing_formals
-      : _repository = repository,
-        super(DishesManagerInitial()) {
+    // ignore: prefer_initializing_formals
+    : _repository = repository,
+      super(DishesManagerInitial()) {
     on<LoadDishesManager>(_onLoad);
+    on<ReloadDishesManager>(_onReload);
     on<FilterManagerByCategory>(_onFilter);
     on<SearchManagerDishes>(_onSearch);
     on<DeleteManagerDish>(_onDelete);
@@ -36,27 +40,46 @@ class DishesManagerBloc extends Bloc<DishesManagerEvent, DishesManagerState> {
         from: today,
         to: today.add(const Duration(days: 6)),
       );
-      final categoryId = categories.any((c) => c.id == previous?.selectedCategoryId)
+      final categoryId =
+          categories.any((c) => c.id == previous?.selectedCategoryId)
           ? previous?.selectedCategoryId
           : null;
       final query = previous?.searchQuery ?? '';
-      emit(DishesManagerLoaded(
-        allDishes: dishes,
-        filteredDishes: _applyFilters(
-          all: dishes,
-          categoryId: categoryId,
-          query: query,
+      emit(
+        DishesManagerLoaded(
+          allDishes: dishes,
+          filteredDishes: _applyFilters(
+            all: dishes,
+            categoryId: categoryId,
+            query: query,
+          ),
+          categories: categories,
+          selectedCategoryId: categoryId,
+          searchQuery: query,
+          scheduledDishIds: scheduledIds,
+          userRole: MockHouseholdStore.userRole,
         ),
-        categories: categories,
-        selectedCategoryId: categoryId,
-        searchQuery: query,
-        scheduledDishIds: scheduledIds,
-        userRole: MockHouseholdStore.userRole,
-      ));
+      );
+      await _changesSubscription?.cancel();
+      final realtimeRepository = _repository is DishesManagerRealtimeRepository
+          ? _repository as DishesManagerRealtimeRepository
+          : null;
+      if (realtimeRepository != null) {
+        _changesSubscription = realtimeRepository
+            .watchChanges(event.householdId)
+            .listen(
+              (_) => add(ReloadDishesManager(householdId: event.householdId)),
+            );
+      }
     } catch (e) {
       emit(DishesManagerError(e.toString()));
     }
   }
+
+  Future<void> _onReload(
+    ReloadDishesManager event,
+    Emitter<DishesManagerState> emit,
+  ) => _onLoad(LoadDishesManager(householdId: event.householdId), emit);
 
   void _onFilter(
     FilterManagerByCategory event,
@@ -65,31 +88,35 @@ class DishesManagerBloc extends Bloc<DishesManagerEvent, DishesManagerState> {
     final current = state;
     if (current is! DishesManagerLoaded) return;
 
-    emit(current.copyWith(
-      filteredDishes: _applyFilters(
-        all: current.allDishes,
-        categoryId: event.categoryId,
-        query: current.searchQuery,
+    emit(
+      current.copyWith(
+        filteredDishes: _applyFilters(
+          all: current.allDishes,
+          categoryId: event.categoryId,
+          query: current.searchQuery,
+        ),
+        selectedCategoryId: event.categoryId,
+        clearCategory: event.categoryId == null,
+        clearActionError: true,
       ),
-      selectedCategoryId: event.categoryId,
-      clearCategory: event.categoryId == null,
-      clearActionError: true,
-    ));
+    );
   }
 
   void _onSearch(SearchManagerDishes event, Emitter<DishesManagerState> emit) {
     final current = state;
     if (current is! DishesManagerLoaded) return;
 
-    emit(current.copyWith(
-      filteredDishes: _applyFilters(
-        all: current.allDishes,
-        categoryId: current.selectedCategoryId,
-        query: event.query,
+    emit(
+      current.copyWith(
+        filteredDishes: _applyFilters(
+          all: current.allDishes,
+          categoryId: current.selectedCategoryId,
+          query: event.query,
+        ),
+        searchQuery: event.query,
+        clearActionError: true,
       ),
-      searchQuery: event.query,
-      clearActionError: true,
-    ));
+    );
   }
 
   Future<void> _onDelete(
@@ -97,33 +124,43 @@ class DishesManagerBloc extends Bloc<DishesManagerEvent, DishesManagerState> {
     Emitter<DishesManagerState> emit,
   ) async {
     final current = state;
-    if (current is! DishesManagerLoaded || current.deletingDishId != null) return;
+    if (current is! DishesManagerLoaded || current.deletingDishId != null) {
+      return;
+    }
     if (!current.isPlanner) return;
 
-    emit(current.copyWith(deletingDishId: event.dishId, clearActionError: true));
+    emit(
+      current.copyWith(deletingDishId: event.dishId, clearActionError: true),
+    );
     try {
       await _repository.deleteDish(
         householdId: event.householdId,
         dishId: event.dishId,
       );
-      final remaining =
-          current.allDishes.where((d) => d.id != event.dishId).toList();
-      emit(current.copyWith(
-        allDishes: remaining,
-        filteredDishes: _applyFilters(
-          all: remaining,
-          categoryId: current.selectedCategoryId,
-          query: current.searchQuery,
+      final remaining = current.allDishes
+          .where((d) => d.id != event.dishId)
+          .toList();
+      emit(
+        current.copyWith(
+          allDishes: remaining,
+          filteredDishes: _applyFilters(
+            all: remaining,
+            categoryId: current.selectedCategoryId,
+            query: current.searchQuery,
+          ),
+          scheduledDishIds: current.scheduledDishIds
+              .where((id) => id != event.dishId)
+              .toList(),
+          clearDeletingDishId: true,
         ),
-        scheduledDishIds:
-            current.scheduledDishIds.where((id) => id != event.dishId).toList(),
-        clearDeletingDishId: true,
-      ));
+      );
     } catch (e) {
-      emit(current.copyWith(
-        clearDeletingDishId: true,
-        actionError: 'Could not delete the dish: ${e.toString()}',
-      ));
+      emit(
+        current.copyWith(
+          clearDeletingDishId: true,
+          actionError: 'Could not delete the dish: ${e.toString()}',
+        ),
+      );
     }
   }
 
@@ -146,5 +183,11 @@ class DishesManagerBloc extends Bloc<DishesManagerEvent, DishesManagerState> {
   DateTime _today() {
     final now = DateTime.now();
     return DateTime(now.year, now.month, now.day);
+  }
+
+  @override
+  Future<void> close() async {
+    await _changesSubscription?.cancel();
+    return super.close();
   }
 }

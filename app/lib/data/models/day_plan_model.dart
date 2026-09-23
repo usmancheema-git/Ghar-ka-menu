@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import '../../core/utils/date_format.dart';
 
 enum DayPlanStatus { planned, cooked, cancelled }
 
@@ -22,6 +23,17 @@ class DayPlanModel extends Equatable {
   });
 
   bool get isEmpty => dishId == null;
+
+  /// S7 History row subtitle ("9 July 2026 · Chawal").
+  String get historySubtitle {
+    final day = formatDayMonthYear(date);
+    return categoryName == null ? day : '$day · $categoryName';
+  }
+
+  /// S7 History badge discriminator. Only a cancelled day reads "Cancelled";
+  /// a past day left as `planned` still counts as served, because at end of day
+  /// a planned dish is marked cooked (`docs/BUSINESS_RULES.md`, Day Rollover).
+  bool get wasCancelled => status == DayPlanStatus.cancelled;
 
   @override
   List<Object?> get props => [id, date, dishId, status];

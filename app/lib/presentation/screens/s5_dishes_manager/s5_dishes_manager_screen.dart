@@ -23,9 +23,7 @@ class S5DishesManagerScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => DishesManagerBloc(repository: getIt())
-        ..add(const LoadDishesManager(
-          householdId: MockHouseholdStore.householdId,
-        )),
+        ..add(LoadDishesManager(householdId: MockHouseholdStore.householdId)),
       child: const _S5Body(),
     );
   }
@@ -48,9 +46,9 @@ class _S5BodyState extends State<_S5Body> {
   }
 
   void _reload() {
-    context.read<DishesManagerBloc>().add(const LoadDishesManager(
-      householdId: MockHouseholdStore.householdId,
-    ));
+    context.read<DishesManagerBloc>().add(
+      LoadDishesManager(householdId: MockHouseholdStore.householdId),
+    );
   }
 
   /// Opens S6 and reloads the list when it reports a successful save.
@@ -68,8 +66,9 @@ class _S5BodyState extends State<_S5Body> {
           if (current is! DishesManagerLoaded || current.actionError == null) {
             return false;
           }
-          final prevError =
-              previous is DishesManagerLoaded ? previous.actionError : null;
+          final prevError = previous is DishesManagerLoaded
+              ? previous.actionError
+              : null;
           return prevError != current.actionError;
         },
         listener: (context, state) {
@@ -97,9 +96,9 @@ class _S5BodyState extends State<_S5Body> {
                 DishSearchField(
                   controller: _searchCtrl,
                   hintText: 'Search preset database…',
-                  onChanged: (q) => context
-                      .read<DishesManagerBloc>()
-                      .add(SearchManagerDishes(q)),
+                  onChanged: (q) => context.read<DishesManagerBloc>().add(
+                    SearchManagerDishes(q),
+                  ),
                 ),
                 Expanded(child: _buildList(context, state)),
               ] else if (state is DishesManagerError)
@@ -129,7 +128,9 @@ class _S5BodyState extends State<_S5Body> {
         padding: const EdgeInsets.all(16),
         decoration: const BoxDecoration(
           color: AppColors.bgCard,
-          border: Border(bottom: BorderSide(color: AppColors.border, width: 1.5)),
+          border: Border(
+            bottom: BorderSide(color: AppColors.border, width: 1.5),
+          ),
         ),
         child: Row(
           children: [
@@ -200,7 +201,11 @@ class _S5BodyState extends State<_S5Body> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const FaIcon(FontAwesomeIcons.utensils, size: 32, color: AppColors.border),
+            const FaIcon(
+              FontAwesomeIcons.utensils,
+              size: 32,
+              color: AppColors.border,
+            ),
             const SizedBox(height: 12),
             Text(
               'No dishes yet',
@@ -226,9 +231,16 @@ class _S5BodyState extends State<_S5Body> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const FaIcon(FontAwesomeIcons.utensils, size: 32, color: AppColors.border),
+          const FaIcon(
+            FontAwesomeIcons.utensils,
+            size: 32,
+            color: AppColors.border,
+          ),
           const SizedBox(height: 12),
-          Text('No dishes found', style: Theme.of(context).textTheme.bodyMedium),
+          Text(
+            'No dishes found',
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
           const SizedBox(height: 4),
           Text(
             'Try a different category or search term',
@@ -289,7 +301,7 @@ class _S5BodyState extends State<_S5Body> {
         content: Text(
           isScheduled
               ? '${dish.name} is planned in this week. Deleting it will leave '
-                  'that day unassigned.'
+                    'that day unassigned.'
               : '${dish.name} will be removed from the dishes database.',
           style: GoogleFonts.plusJakartaSans(
             fontSize: 13,
@@ -325,10 +337,12 @@ class _S5BodyState extends State<_S5Body> {
     );
 
     if (confirmed == true) {
-      bloc.add(DeleteManagerDish(
-        dishId: dish.id,
-        householdId: MockHouseholdStore.householdId,
-      ));
+      bloc.add(
+        DeleteManagerDish(
+          dishId: dish.id,
+          householdId: MockHouseholdStore.householdId,
+        ),
+      );
     }
   }
 }
@@ -364,7 +378,11 @@ class _AddCircleButton extends StatelessWidget {
             width: 36,
             height: 36,
             child: Center(
-              child: FaIcon(FontAwesomeIcons.plus, size: 16, color: Colors.white),
+              child: FaIcon(
+                FontAwesomeIcons.plus,
+                size: 16,
+                color: Colors.white,
+              ),
             ),
           ),
         ),
@@ -394,7 +412,7 @@ class _ManagerItem extends StatelessWidget {
   });
 
   /// Delete icon colour, from `prototype/s5_dishes_manager/index.html`.
-  static const Color deleteColor = Color(0xFFFF4D4F);
+  static const Color deleteColor = AppColors.danger;
 
   @override
   Widget build(BuildContext context) {

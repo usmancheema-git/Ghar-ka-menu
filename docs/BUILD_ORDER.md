@@ -12,7 +12,7 @@ The implementation should follow this strict sequence based on dependencies:
 ## Phase 2: Core Infrastructure & Auth
 - Implement generic Repositories for Supabase access.
 - Build **S1 Onboarding**.
-- Implement Household creation / Join via code logic (with Google Auth mapping).
+- Implement Household creation / Join via code logic (with Supabase Email Auth mapping).
 - Save user session and route to Home.
 
 ## Phase 3: Core App (Read-Only)

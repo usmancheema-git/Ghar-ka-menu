@@ -1,3 +1,5 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../mock/mock_household_store.dart';
 import '../models/category_model.dart';
 import '../models/dish_model.dart';
@@ -31,22 +33,23 @@ abstract class DishFormRepository {
 }
 
 class SupabaseDishFormRepository implements DishFormRepository {
-  SupabaseDishFormRepository();
+  SupabaseDishFormRepository(this._supabase);
 
+  final SupabaseClient? _supabase;
   final MockHouseholdStore _store = MockHouseholdStore.instance;
 
   @override
   Future<List<CategoryModel>> fetchCategories(String householdId) async {
-    await Future<void>.delayed(const Duration(milliseconds: 300));
+    if (_supabase != null) {
+      final response = await _supabase
+          .from('categories')
+          .select()
+          .eq('household_id', householdId)
+          .order('sort_order');
+      return response.map((row) => CategoryModel.fromMap(row)).toList();
+    }
 
-    /* Actual implementation:
-    final response = await _supabase
-        .from('categories')
-        .select()
-        .eq('household_id', householdId)
-        .order('sort_order');
-    return (response as List).map((e) => CategoryModel.fromMap(e)).toList();
-    */
+    await Future<void>.delayed(const Duration(milliseconds: 300));
 
     return List<CategoryModel>.from(_store.categories);
   }
@@ -56,19 +59,20 @@ class SupabaseDishFormRepository implements DishFormRepository {
     required String householdId,
     required String dishId,
   }) async {
-    await Future<void>.delayed(const Duration(milliseconds: 300));
+    if (_supabase != null) {
+      final response = await _supabase
+          .from('dishes')
+          .select(
+            'id, name, category_id, ingredients_text, notes, last_cooked_on, times_cooked, categories(name)',
+          )
+          .eq('household_id', householdId)
+          .eq('id', dishId)
+          .maybeSingle();
+      if (response == null) return null;
+      return DishModel.fromMap(response);
+    }
 
-    /* Actual implementation:
-    final response = await _supabase
-        .from('dishes')
-        .select('id, name, category_id, ingredients_text, notes, '
-            'last_cooked_on, times_cooked, categories(name)')
-        .eq('household_id', householdId)
-        .eq('id', dishId)
-        .maybeSingle();
-    if (response == null) return null;
-    return DishModel.fromMap(response);
-    */
+    await Future<void>.delayed(const Duration(milliseconds: 300));
 
     return _store.dishById(dishId);
   }
@@ -81,17 +85,18 @@ class SupabaseDishFormRepository implements DishFormRepository {
     String? ingredientsText,
     String? notes,
   }) async {
-    await Future<void>.delayed(const Duration(milliseconds: 500));
+    if (_supabase != null) {
+      await _supabase.from('dishes').insert({
+        'household_id': householdId,
+        'category_id': categoryId,
+        'name': name,
+        'ingredients_text': ingredientsText,
+        'notes': notes,
+      });
+      return;
+    }
 
-    /* Actual implementation:
-    await _supabase.from('dishes').insert({
-      'household_id': householdId,
-      'category_id': categoryId,
-      'name': name,
-      'ingredients_text': ingredientsText,
-      'notes': notes,
-    });
-    */
+    await Future<void>.delayed(const Duration(milliseconds: 500));
 
     _store.addDish(
       name: name,
@@ -110,20 +115,21 @@ class SupabaseDishFormRepository implements DishFormRepository {
     String? ingredientsText,
     String? notes,
   }) async {
-    await Future<void>.delayed(const Duration(milliseconds: 500));
+    if (_supabase != null) {
+      await _supabase
+          .from('dishes')
+          .update({
+            'category_id': categoryId,
+            'name': name,
+            'ingredients_text': ingredientsText,
+            'notes': notes,
+          })
+          .eq('household_id', householdId)
+          .eq('id', dishId);
+      return;
+    }
 
-    /* Actual implementation:
-    await _supabase
-        .from('dishes')
-        .update({
-          'category_id': categoryId,
-          'name': name,
-          'ingredients_text': ingredientsText,
-          'notes': notes,
-        })
-        .eq('household_id', householdId)
-        .eq('id', dishId);
-    */
+    await Future<void>.delayed(const Duration(milliseconds: 500));
 
     _store.updateDish(
       id: dishId,

@@ -9,7 +9,9 @@ import 'package:ghar_ka_menu/presentation/bloc/onboarding/onboarding_event.dart'
 import 'package:ghar_ka_menu/presentation/bloc/onboarding/onboarding_state.dart';
 
 class S1OnboardingScreen extends StatefulWidget {
-  const S1OnboardingScreen({super.key});
+  const S1OnboardingScreen({super.key, this.signupMode = false});
+
+  final bool signupMode;
 
   @override
   State<S1OnboardingScreen> createState() => _S1OnboardingScreenState();
@@ -18,13 +20,28 @@ class S1OnboardingScreen extends StatefulWidget {
 class _S1OnboardingScreenState extends State<S1OnboardingScreen> {
   String _activeForm = ''; // 'create' or 'join'
 
-  final TextEditingController _householdNameController = TextEditingController(text: 'Awais Family');
-  final TextEditingController _yourNameController = TextEditingController(text: 'Awais');
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _householdNameController = TextEditingController(
+    text: 'Awais Family',
+  );
+  final TextEditingController _yourNameController = TextEditingController(
+    text: 'Awais',
+  );
   final TextEditingController _joinCodeController = TextEditingController();
   final TextEditingController _joinNameController = TextEditingController();
 
-  void _signInWithGoogle(BuildContext context) {
-    context.read<OnboardingBloc>().add(SignInWithGoogleRequested());
+  void _authenticateWithEmail(
+    BuildContext context, {
+    required bool createAccount,
+  }) {
+    context.read<OnboardingBloc>().add(
+      SignInWithEmailRequested(
+        email: _emailController.text,
+        password: _passwordController.text,
+        createAccount: createAccount,
+      ),
+    );
   }
 
   void _showForm(String type) {
@@ -41,6 +58,8 @@ class _S1OnboardingScreenState extends State<S1OnboardingScreen> {
 
   @override
   void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
     _householdNameController.dispose();
     _yourNameController.dispose();
     _joinCodeController.dispose();
@@ -62,13 +81,16 @@ class _S1OnboardingScreenState extends State<S1OnboardingScreen> {
                   context.go('/home');
                 } else if (state is OnboardingError) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(state.message), backgroundColor: Colors.red),
+                    SnackBar(
+                      content: Text(state.message),
+                      backgroundColor: Colors.red,
+                    ),
                   );
                 }
               },
               builder: (context, state) {
                 final isLoading = state is OnboardingLoading;
-                
+
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -84,10 +106,17 @@ class _S1OnboardingScreenState extends State<S1OnboardingScreen> {
                                 child: CircularProgressIndicator(),
                               ),
                             if (!isLoading) ...[
-                              if (state is OnboardingInitial) _buildSignInStep(context),
-                              if (state is OnboardingAuthenticated && _activeForm.isEmpty) _buildChoicesStep(),
-                              if (state is OnboardingAuthenticated && _activeForm == 'create') _buildCreateForm(context),
-                              if (state is OnboardingAuthenticated && _activeForm == 'join') _buildJoinForm(context),
+                              if (state is OnboardingInitial)
+                                _buildSignInStep(context),
+                              if (state is OnboardingAuthenticated &&
+                                  _activeForm.isEmpty)
+                                _buildChoicesStep(),
+                              if (state is OnboardingAuthenticated &&
+                                  _activeForm == 'create')
+                                _buildCreateForm(context),
+                              if (state is OnboardingAuthenticated &&
+                                  _activeForm == 'join')
+                                _buildJoinForm(context),
                             ],
                             const SizedBox(height: 20),
                           ],
@@ -96,7 +125,7 @@ class _S1OnboardingScreenState extends State<S1OnboardingScreen> {
                     ),
                   ],
                 );
-              }
+              },
             ),
           ),
         ),
@@ -114,7 +143,9 @@ class _S1OnboardingScreenState extends State<S1OnboardingScreen> {
           decoration: BoxDecoration(
             color: AppColors.primaryLight,
             borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: AppColors.primary.withValues(alpha: 0.15)),
+            border: Border.all(
+              color: AppColors.primary.withValues(alpha: 0.15),
+            ),
             boxShadow: [
               BoxShadow(
                 color: AppColors.textMain.withValues(alpha: 0.04),
@@ -132,16 +163,14 @@ class _S1OnboardingScreenState extends State<S1OnboardingScreen> {
         const SizedBox(height: 10),
         Text(
           'Ghar ka Menu',
-          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-            fontWeight: FontWeight.w800,
-          ),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.w800),
         ),
         const SizedBox(height: 4),
         Text(
           'Joint family lunch planner',
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-            fontSize: 12,
-          ),
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12),
         ),
       ],
     );
@@ -149,50 +178,44 @@ class _S1OnboardingScreenState extends State<S1OnboardingScreen> {
 
   Widget _buildSignInStep(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        InkWell(
-          onTap: () => _signInWithGoogle(context),
-          borderRadius: BorderRadius.circular(16),
-          child: Container(
-            height: 50,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(color: AppColors.border, width: 1.5),
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.textMain.withValues(alpha: 0.04),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const FaIcon(FontAwesomeIcons.google, color: Colors.blue, size: 18),
-                const SizedBox(width: 10),
-                Text(
-                  'Sign in with Google',
-                  style: Theme.of(context).textTheme.labelLarge?.copyWith(fontSize: 14),
-                ),
-              ],
-            ),
+        _buildInputLabel('EMAIL'),
+        TextField(
+          controller: _emailController,
+          keyboardType: TextInputType.emailAddress,
+          decoration: const InputDecoration(hintText: 'you@example.com'),
+        ),
+        const SizedBox(height: 12),
+        _buildInputLabel('PASSWORD'),
+        TextField(
+          controller: _passwordController,
+          obscureText: true,
+          decoration: const InputDecoration(hintText: 'At least 6 characters'),
+        ),
+        const SizedBox(height: 16),
+        ElevatedButton.icon(
+          onPressed: () =>
+              _authenticateWithEmail(context, createAccount: widget.signupMode),
+          icon: const FaIcon(FontAwesomeIcons.rightToBracket, size: 16),
+          label: Text(
+            widget.signupMode ? 'Create Account' : 'Sign In with Email',
           ),
         ),
-        const SizedBox(height: 14),
-        Row(
-          children: [
-            const Expanded(child: Divider(color: AppColors.border, thickness: 1.5)),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Text(
-                'secure authentication',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 11),
-              ),
-            ),
-            const Expanded(child: Divider(color: AppColors.border, thickness: 1.5)),
-          ],
+        const SizedBox(height: 10),
+        OutlinedButton.icon(
+          onPressed: () => context.go(widget.signupMode ? '/login' : '/signup'),
+          icon: FaIcon(
+            widget.signupMode
+                ? FontAwesomeIcons.rightToBracket
+                : FontAwesomeIcons.userPlus,
+            size: 16,
+          ),
+          label: Text(
+            widget.signupMode
+                ? 'Already have an account? Sign In'
+                : 'Create Email Account',
+          ),
         ),
       ],
     );
@@ -205,7 +228,10 @@ class _S1OnboardingScreenState extends State<S1OnboardingScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           decoration: BoxDecoration(
             color: AppColors.secondaryLight,
-            border: Border.all(color: AppColors.secondary.withValues(alpha: 0.2), width: 1.5),
+            border: Border.all(
+              color: AppColors.secondary.withValues(alpha: 0.2),
+              width: 1.5,
+            ),
             borderRadius: BorderRadius.circular(16),
           ),
           child: Row(
@@ -232,12 +258,28 @@ class _S1OnboardingScreenState extends State<S1OnboardingScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Awais', style: Theme.of(context).textTheme.labelMedium?.copyWith(fontSize: 13)),
-                    Text('awais@gmail.com', style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 10.5)),
+                    Text(
+                      _emailController.text.isEmpty
+                          ? 'Email account'
+                          : _emailController.text,
+                      style: Theme.of(
+                        context,
+                      ).textTheme.labelMedium?.copyWith(fontSize: 13),
+                    ),
+                    Text(
+                      'Signed in with email',
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodySmall?.copyWith(fontSize: 10.5),
+                    ),
                   ],
                 ),
               ),
-              const FaIcon(FontAwesomeIcons.circleCheck, color: AppColors.secondary, size: 16),
+              const FaIcon(
+                FontAwesomeIcons.circleCheck,
+                color: AppColors.secondary,
+                size: 16,
+              ),
             ],
           ),
         ),
@@ -259,7 +301,11 @@ class _S1OnboardingScreenState extends State<S1OnboardingScreen> {
 
   Widget _buildCreateForm(BuildContext context) {
     return _buildFormCard(
-      titleIconWidget: const FaIcon(FontAwesomeIcons.circlePlus, color: AppColors.primary, size: 16),
+      titleIconWidget: const FaIcon(
+        FontAwesomeIcons.circlePlus,
+        color: AppColors.primary,
+        size: 16,
+      ),
       title: 'Setup Household',
       onBack: _showChoices,
       content: Column(
@@ -268,7 +314,9 @@ class _S1OnboardingScreenState extends State<S1OnboardingScreen> {
           _buildInputLabel('HOUSEHOLD NAME'),
           TextField(
             controller: _householdNameController,
-            decoration: const InputDecoration(hintText: 'e.g., Awais Joint Family'),
+            decoration: const InputDecoration(
+              hintText: 'e.g., Awais Joint Family',
+            ),
           ),
           const SizedBox(height: 12),
           _buildInputLabel('YOUR NAME'),
@@ -283,7 +331,7 @@ class _S1OnboardingScreenState extends State<S1OnboardingScreen> {
                 CreateHouseholdRequested(
                   householdName: _householdNameController.text,
                   userName: _yourNameController.text,
-                )
+                ),
               );
             },
             child: Row(
@@ -302,7 +350,11 @@ class _S1OnboardingScreenState extends State<S1OnboardingScreen> {
 
   Widget _buildJoinForm(BuildContext context) {
     return _buildFormCard(
-      titleIconWidget: const FaIcon(FontAwesomeIcons.key, color: AppColors.secondary, size: 16),
+      titleIconWidget: const FaIcon(
+        FontAwesomeIcons.key,
+        color: AppColors.secondary,
+        size: 16,
+      ),
       title: 'Join Code',
       onBack: _showChoices,
       content: Column(
@@ -323,11 +375,11 @@ class _S1OnboardingScreenState extends State<S1OnboardingScreen> {
           const SizedBox(height: 16),
           OutlinedButton(
             onPressed: () {
-               context.read<OnboardingBloc>().add(
+              context.read<OnboardingBloc>().add(
                 JoinHouseholdRequested(
                   joinCode: _joinCodeController.text,
                   userName: _joinNameController.text,
-                )
+                ),
               );
             },
             child: const Text('Join Household'),
@@ -382,7 +434,9 @@ class _S1OnboardingScreenState extends State<S1OnboardingScreen> {
                   const SizedBox(width: 6),
                   Text(
                     title,
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 14),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.titleSmall?.copyWith(fontSize: 14),
                   ),
                 ],
               ),
@@ -390,7 +444,11 @@ class _S1OnboardingScreenState extends State<S1OnboardingScreen> {
                 onTap: onBack,
                 child: Row(
                   children: [
-                    FaIcon(FontAwesomeIcons.chevronLeft, size: 10, color: AppColors.primary),
+                    FaIcon(
+                      FontAwesomeIcons.chevronLeft,
+                      size: 10,
+                      color: AppColors.primary,
+                    ),
                     const SizedBox(width: 3),
                     Text(
                       'Back',

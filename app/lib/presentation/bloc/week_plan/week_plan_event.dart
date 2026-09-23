@@ -9,6 +9,8 @@ abstract class WeekPlanEvent extends Equatable {
 
 class LoadWeekPlan extends WeekPlanEvent {}
 
+class ReloadWeekPlan extends WeekPlanEvent {}
+
 class UpdateDayStatus extends WeekPlanEvent {
   final String planId;
   final DayPlanStatus status;

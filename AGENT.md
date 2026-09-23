@@ -13,7 +13,7 @@
 - **App Name**: Ghar ka Menu
 - **Purpose**: Shared family lunch planner. Allows a single household to view the next 7 days' menu, tracked by a planner. Resolves the daily "Aaj kya pakega?" question.
 - **Target Users**: Joint families (Planners and Members).
-- **Current State**: v1 specification complete. Implementation in progress — S1 Onboarding, S2 Week View, S3 Assign Dish, S4 Dish Profile, S5 Dishes Manager, and S6 Add/Edit Dish are built (running on an in-memory mock store while Supabase is wired up). S7 History and S8 Settings remain.
+- **Current State**: v1 screens and Supabase repository/realtime integration are implemented. The app retains an in-memory mock fallback; live operation requires applying the Supabase migration and configuring project credentials.
 - **Major Features**: Household join via code, 7-day rolling lunch planner, auto-cooked tracking, recommendation sorting (days since last cooked).
 
 ## 3. Technology Stack

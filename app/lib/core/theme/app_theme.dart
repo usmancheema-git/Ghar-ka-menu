@@ -19,6 +19,11 @@ class AppColors {
   static const Color border = Color(0xFFEBE5DF);
   static const Color accent = Color(0xFFE6A23C);
   static const Color accentLight = Color(0xFFFDF6EC);
+
+  /// Destructive / cancelled pair. From the prototypes: the S5 delete icon and
+  /// the S7 "Cancelled" badge.
+  static const Color danger = Color(0xFFFF4D4F);
+  static const Color dangerLight = Color(0xFFFFF1F0);
 }
 
 class AppTheme {

@@ -11,11 +11,80 @@ class MockHouseholdStore {
 
   static final MockHouseholdStore instance = MockHouseholdStore._();
 
-  static const String householdId = 'household-mock-id';
-  static const String householdName = 'Awais Family';
+  static final Map<String, String> householdCodes = {
+    '482910': 'Awais Family',
+    '123456': 'Khan Family',
+    '111111': 'Green Valley Family',
+  };
+
+  static String householdId = 'household-mock-id';
+  static String householdName = 'Awais Family';
+  static String joinCode = '482910';
+  static bool isAuthenticated = false;
 
   /// Signed-in member's role. Comes from `members.role` once auth is wired.
-  static const String userRole = 'planner';
+  static String userRole = 'planner';
+
+  static void setSession({
+    required String householdIdValue,
+    required String householdNameValue,
+    required String role,
+    String? joinCodeValue,
+    bool authenticated = true,
+  }) {
+    householdId = householdIdValue.trim().isEmpty
+        ? 'household-mock-id'
+        : householdIdValue.trim();
+    householdName = householdNameValue.trim().isEmpty
+        ? 'Awais Family'
+        : householdNameValue.trim();
+    final candidateCode =
+        (joinCodeValue ??
+                householdCodes.entries
+                    .firstWhere(
+                      (entry) => entry.value == householdName,
+                      orElse: () => const MapEntry('482910', 'Awais Family'),
+                    )
+                    .key)
+            .trim();
+    joinCode = candidateCode.isEmpty ? '482910' : candidateCode;
+    isAuthenticated = authenticated;
+    setUserRole(role);
+  }
+
+  static String? householdNameForCode(String code) {
+    final cleanCode = code.trim();
+    return householdCodes[cleanCode];
+  }
+
+  static String generateJoinCode() {
+    const start = 100000;
+    const end = 999999;
+
+    int candidate =
+        DateTime.now().millisecondsSinceEpoch % (end - start + 1) + start;
+    while (householdCodes.containsKey(candidate.toString())) {
+      candidate = (candidate + 37) % end + start;
+      if (candidate < start) {
+        candidate += start;
+      }
+    }
+
+    return candidate.toString();
+  }
+
+  static void setUserRole(String value) {
+    final normalised = value.trim().toLowerCase();
+    userRole = normalised == 'member' ? 'member' : 'planner';
+  }
+
+  static void clearSession() {
+    householdId = 'household-mock-id';
+    householdName = 'Awais Family';
+    joinCode = '482910';
+    userRole = 'planner';
+    isAuthenticated = false;
+  }
 
   final List<CategoryModel> categories = const [
     CategoryModel(id: 'c1', name: 'Sabzi', sortOrder: 1),
@@ -88,10 +157,20 @@ class MockHouseholdStore {
     return result;
   }
 
-  void upsertDayPlan({
-    required String dishId,
-    required DateTime date,
-  }) {
+  /// Day plans that actually exist in [from]..[to], newest first.
+  /// Unlike [weekPlans] this does not pad the gaps: S7 History is a log of
+  /// records, not a calendar, so days that were never planned are omitted.
+  List<DayPlanModel> plansBetween(DateTime from, DateTime to) {
+    final result = <DayPlanModel>[];
+    final days = to.difference(from).inDays;
+    for (int i = days; i >= 0; i--) {
+      final plan = _plansByDate[dateKey(from.add(Duration(days: i)))];
+      if (plan != null && !plan.isEmpty) result.add(plan);
+    }
+    return result;
+  }
+
+  void upsertDayPlan({required String dishId, required DateTime date}) {
     final dish = dishById(dishId);
     if (dish == null) {
       throw StateError('Dish not found');
@@ -99,7 +178,9 @@ class MockHouseholdStore {
     final key = dateKey(date);
     final existing = _plansByDate[key];
     _plansByDate[key] = DayPlanModel(
-      id: (existing != null && existing.id.isNotEmpty) ? existing.id : 'plan-$key',
+      id: (existing != null && existing.id.isNotEmpty)
+          ? existing.id
+          : 'plan-$key',
       date: DateTime(date.year, date.month, date.day),
       dishId: dish.id,
       dishName: dish.name,
@@ -344,5 +425,22 @@ class MockHouseholdStore {
     put(3, 'd4', DayPlanStatus.planned);
     put(4, 'd8', DayPlanStatus.cancelled);
     put(6, 'd7', DayPlanStatus.planned);
+
+    // Past records for S7 History. Cooked dates line up with each dish's
+    // `lastCookedOn`; the two cancelled days deliberately do not, because a
+    // cancelled meal never updates `last_cooked_on` / `times_cooked`.
+    // Gaps (offsets -3, -6, -8, …) are days nobody planned — no record exists.
+    put(-1, 'd5', DayPlanStatus.cooked);
+    put(-2, 'd1', DayPlanStatus.cancelled);
+    put(-4, 'd8', DayPlanStatus.cooked);
+    put(-5, 'd7', DayPlanStatus.cooked);
+    put(-7, 'd10', DayPlanStatus.cooked);
+    put(-9, 'd9', DayPlanStatus.cooked);
+    put(-12, 'd4', DayPlanStatus.cooked);
+    put(-15, 'd6', DayPlanStatus.cancelled);
+    put(-18, 'd3', DayPlanStatus.cooked);
+    put(-25, 'd2', DayPlanStatus.cooked);
+    // Older than the 30-day window — must not reach S7.
+    put(-34, 'd3', DayPlanStatus.cooked);
   }
 }

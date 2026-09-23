@@ -38,4 +38,4 @@ Requires a cron job (Edge Function) on Supabase.
 
 ## Open Decisions
 - Exact mechanism for triggering push notifications based on per-household timezones.
-- Finalization of Google Auth vs Anonymous Auth onboarding flow mapping.
+- Email confirmation policy for development versus production.

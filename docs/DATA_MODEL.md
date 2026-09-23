@@ -46,5 +46,9 @@ All data is stored in Supabase (PostgreSQL).
 - Members (`role = 'member'`) have `SELECT` access only for `categories`, `dishes`, and `day_plans`.
 - Planners (`role = 'planner'`) have `ALL` access for `categories`, `dishes`, and `day_plans`.
 
-## Open Questions / Decisions Required
-- How is the S1 Onboarding Google Sign-In mapped to the `members` table? We need to ensure the Auth User ID syncs with the `members.id`.
+## Implementation Notes
+- `members.id` maps directly to `auth.users.id`.
+- Household creation and joining use the security-definer RPCs `create_household` and `join_household` in `supabase/migrations/001_initial_schema.sql`.
+- `day_plans.dish_id` is nullable so deleting a dish can leave an unassigned day.
+- Realtime is enabled for household, member, category, dish, and day-plan changes by the migration.
+- Apply `002_production_hardening.sql` after the initial migration to seed default categories and restrict role changes to planners through `update_member_role`.

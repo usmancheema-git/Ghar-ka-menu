@@ -30,8 +30,10 @@ The v1 specification and HTML/CSS screen prototypes are complete. The Flutter im
 - S4 Dish Detail
 - S5 Dishes Manager
 - S6 Add/Edit Dish
+- S7 History
+- S8 Settings
 
-These screens currently run with an in-memory mock store while Supabase integration is being completed. S7 History and S8 Settings are still planned.
+The app supports an in-memory fallback for local exploration and live Supabase repositories when started with `SUPABASE_URL` and `SUPABASE_ANON_KEY` dart-defines. Week View, Dishes Manager, and History subscribe to Supabase Realtime changes.
 
 ## Screenshots
 
@@ -88,7 +90,11 @@ flutter analyze
 flutter test
 ```
 
-The current implementation uses mock data, so a Supabase project and credentials are not required to explore the implemented screens.
+Without Supabase dart-defines, the app uses mock data so the screens can still be explored locally. For live mode, apply `supabase/migrations/001_initial_schema.sql` followed by `supabase/migrations/002_production_hardening.sql`, enable Email Auth and Realtime, and run:
+
+```bash
+flutter run -d windows --dart-define=SUPABASE_URL=https://YOUR_PROJECT.supabase.co --dart-define=SUPABASE_ANON_KEY=YOUR_PUBLIC_KEY
+```
 
 ## Scope
 

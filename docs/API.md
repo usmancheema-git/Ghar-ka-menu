@@ -4,7 +4,7 @@ This project does not use a traditional REST API. It uses **Supabase** via the F
 
 ## Supabase Implementation
 - **Base connection**: Configured via Supabase URL and Anon Key.
-- **Authentication**: Supports Google Sign-In and anonymous auth (or custom token based on the onboarding flow).
+- **Authentication**: Uses Supabase email/password authentication. Users can create an account or sign in, then create or join a household.
 - **Data Access**: Direct PostgREST queries using the `supabase_flutter` package.
 
 ## Edge Functions & Scheduled Jobs
@@ -19,6 +19,11 @@ This project does not use a traditional REST API. It uses **Supabase** via the F
   - Sends push notifications to `fcm_token` of members via Firebase Cloud Messaging.
   - If no dish is planned, sends a reminder alert to the planner.
 
-## Open Questions / Decisions Required
-- Is the Push Alert job going to be a Supabase Cron (`pg_cron`) triggering an Edge Function? (Likely yes, needs final setup definition).
-- Does the S1 Onboarding Google Sign-In replace Anonymous auth? (Needs confirmation on auth setup in Supabase dashboard).
+## Deployment
+- Apply `supabase/migrations/001_initial_schema.sql`, then `supabase/migrations/002_production_hardening.sql` to create tables, RLS policies, onboarding RPCs, realtime publication, rollover, default categories, and planner-only role updates.
+- Deploy `supabase/functions/send-menu-alerts/index.ts` as the `send-menu-alerts` Edge Function.
+- Configure `SUPABASE_SERVICE_ROLE_KEY` and `FCM_SERVER_KEY` as function secrets.
+- Enable the Email provider in Supabase Auth. Configure email confirmation according to the desired development/production policy.
+- Schedule the rollover function daily with `pg_cron`, and invoke `send-menu-alerts` at the household notification cadence.
+- Schedule `send-menu-alerts` every minute with `pg_cron`; it sends only to households whose `alert_time` matches the current UTC minute.
+- Add Firebase Messaging to the mobile targets and call `HouseholdRepository.updateCurrentMemberToken` after permission/token refresh.

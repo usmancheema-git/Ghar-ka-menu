@@ -4,11 +4,11 @@
 S1
 
 ## Purpose
-This screen handles the entry flow for a user. It uses a Household Code Model to avoid complex email/password setups.
+This screen handles the entry flow for a user using Supabase email/password authentication and a household join code.
 
 ## User Flow
-- **Planner**: Clicks Google Sign-In, creates a new household, gives it a name, and gets a unique 6-digit join code.
-- **Member**: Clicks Google Sign-In, enters the 6-digit join code shared by the Planner, and joins the household.
+- **Planner**: Creates or signs in to an email account, creates a new household, gives it a name, and gets a unique 6-digit join code.
+- **Member**: Creates or signs in to an email account, enters the 6-digit join code shared by the Planner, and joins the household.
 
 ## Entry Points
 - App Start (Unauthenticated state)
@@ -21,7 +21,7 @@ This screen handles the entry flow for a user. It uses a Household Code Model to
 
 ## Layout Structure
 - App Logo & Branding at the top.
-- Google Sign-In Button (initially).
+- Email and password fields with sign-in and account creation actions.
 - After Sign-In: Signed-in user bar (avatar, name, email).
 - Card A (Setup New Household) section.
 - Text Divider ("OR").
@@ -29,7 +29,7 @@ This screen handles the entry flow for a user. It uses a Household Code Model to
 
 ## Components
 - Brand Logo
-- Primary Button (Google Sign-In, Create, Join)
+- Primary Buttons (Email Sign-In, Account Creation, Create, Join)
 - Input Fields (Household Name, Join Code)
 - Text Dividers
 
@@ -38,7 +38,8 @@ This screen handles the entry flow for a user. It uses a Household Code Model to
 - Ensure proper spacing between the two main action cards.
 
 ## Interactions
-- Tapping "Google Sign-In" triggers auth popup/flow.
+- Tapping "Sign In with Email" authenticates the existing account.
+- Tapping "Create Email Account" creates a Supabase Auth account.
 - Entering text in Household Name and tapping "Create & Become Planner".
 - Entering 6-digit code in Join Code and tapping "Join as Member".
 
@@ -55,7 +56,7 @@ This screen handles the entry flow for a user. It uses a Household Code Model to
 - `members` (name, role, household_id)
 
 ## API Requirements
-- Supabase Auth (Google Provider)
+- Supabase Auth (Email Provider)
 - PostgREST queries to insert/select households.
 
 ## State Requirements
@@ -73,7 +74,7 @@ This screen handles the entry flow for a user. It uses a Household Code Model to
 
 ## Edge Cases
 - Invalid join code entered.
-- User closes Google Sign-In modal prematurely.
+- Email confirmation is required when enabled in Supabase Auth.
 
 ## Acceptance Criteria
 - Planner can successfully create a household and is redirected to S2.

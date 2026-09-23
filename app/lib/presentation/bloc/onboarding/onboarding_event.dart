@@ -7,7 +7,20 @@ abstract class OnboardingEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class SignInWithGoogleRequested extends OnboardingEvent {}
+class SignInWithEmailRequested extends OnboardingEvent {
+  final String email;
+  final String password;
+  final bool createAccount;
+
+  const SignInWithEmailRequested({
+    required this.email,
+    required this.password,
+    this.createAccount = false,
+  });
+
+  @override
+  List<Object?> get props => [email, password, createAccount];
+}
 
 class CreateHouseholdRequested extends OnboardingEvent {
   final String householdName;

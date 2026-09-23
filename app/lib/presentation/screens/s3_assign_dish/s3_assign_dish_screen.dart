@@ -23,9 +23,7 @@ class S3AssignDishScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => AssignDishBloc(repository: getIt())
-        ..add(const LoadAssignDishData(
-          householdId: MockHouseholdStore.householdId,
-        )),
+        ..add(LoadAssignDishData(householdId: MockHouseholdStore.householdId)),
       child: _S3Body(date: date),
     );
   }
@@ -50,11 +48,27 @@ class _S3BodyState extends State<_S3Body> {
     super.initState();
     _parsedDate = DateTime.tryParse(widget.date) ?? DateTime.now();
     const weekdays = [
-      'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+      'Sunday',
     ];
     const months = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December',
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
     ];
     _formattedDate =
         '${weekdays[_parsedDate.weekday - 1]}, ${_parsedDate.day} ${months[_parsedDate.month - 1]}';
@@ -70,9 +84,13 @@ class _S3BodyState extends State<_S3Body> {
   Widget build(BuildContext context) {
     return BlocConsumer<AssignDishBloc, AssignDishState>(
       listenWhen: (previous, current) {
-        if (current is AssignDishSuccess || current is AssignDishError) return true;
+        if (current is AssignDishSuccess || current is AssignDishError) {
+          return true;
+        }
         if (current is AssignDishLoaded && current.actionError != null) {
-          final prevError = previous is AssignDishLoaded ? previous.actionError : null;
+          final prevError = previous is AssignDishLoaded
+              ? previous.actionError
+              : null;
           return prevError != current.actionError;
         }
         return false;
@@ -86,11 +104,17 @@ class _S3BodyState extends State<_S3Body> {
           }
         } else if (state is AssignDishError) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message), backgroundColor: Colors.redAccent),
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: Colors.redAccent,
+            ),
           );
         } else if (state is AssignDishLoaded && state.actionError != null) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.actionError!), backgroundColor: Colors.redAccent),
+            SnackBar(
+              content: Text(state.actionError!),
+              backgroundColor: Colors.redAccent,
+            ),
           );
         }
       },
@@ -115,15 +139,22 @@ class _S3BodyState extends State<_S3Body> {
                           const ColoredBox(
                             color: Color(0x66FAF8F5),
                             child: Center(
-                              child: CircularProgressIndicator(color: AppColors.primary),
+                              child: CircularProgressIndicator(
+                                color: AppColors.primary,
+                              ),
                             ),
                           ),
                       ],
                     ),
                   ),
-                ] else if (state is AssignDishLoading || state is AssignDishInitial)
+                ] else if (state is AssignDishLoading ||
+                    state is AssignDishInitial)
                   const Expanded(
-                    child: Center(child: CircularProgressIndicator(color: AppColors.primary)),
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.primary,
+                      ),
+                    ),
                   )
                 else if (state is AssignDishError)
                   Expanded(child: _buildError(context, state.message)),
@@ -162,7 +193,11 @@ class _S3BodyState extends State<_S3Body> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const FaIcon(FontAwesomeIcons.utensils, size: 32, color: AppColors.border),
+              const FaIcon(
+                FontAwesomeIcons.utensils,
+                size: 32,
+                color: AppColors.border,
+              ),
               const SizedBox(height: 12),
               Text(
                 'No dishes yet',
@@ -186,9 +221,16 @@ class _S3BodyState extends State<_S3Body> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const FaIcon(FontAwesomeIcons.utensils, size: 32, color: AppColors.border),
+            const FaIcon(
+              FontAwesomeIcons.utensils,
+              size: 32,
+              color: AppColors.border,
+            ),
             const SizedBox(height: 12),
-            Text('No dishes found', style: Theme.of(context).textTheme.bodyMedium),
+            Text(
+              'No dishes found',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
             const SizedBox(height: 4),
             Text(
               'Try a different category or search term',
@@ -212,11 +254,13 @@ class _S3BodyState extends State<_S3Body> {
           onTap: state.isAssigning
               ? null
               : () {
-                  context.read<AssignDishBloc>().add(AssignDishToDay(
-                    dishId: dish.id,
-                    householdId: MockHouseholdStore.householdId,
-                    date: _parsedDate,
-                  ));
+                  context.read<AssignDishBloc>().add(
+                    AssignDishToDay(
+                      dishId: dish.id,
+                      householdId: MockHouseholdStore.householdId,
+                      date: _parsedDate,
+                    ),
+                  );
                 },
         );
       },
@@ -228,14 +272,18 @@ class _S3BodyState extends State<_S3Body> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const FaIcon(FontAwesomeIcons.triangleExclamation, color: AppColors.accent, size: 32),
+          const FaIcon(
+            FontAwesomeIcons.triangleExclamation,
+            color: AppColors.accent,
+            size: 32,
+          ),
           const SizedBox(height: 12),
           Text(message, style: Theme.of(context).textTheme.bodyMedium),
           const SizedBox(height: 16),
           ElevatedButton(
-            onPressed: () => context.read<AssignDishBloc>().add(const LoadAssignDishData(
-              householdId: MockHouseholdStore.householdId,
-            )),
+            onPressed: () => context.read<AssignDishBloc>().add(
+              LoadAssignDishData(householdId: MockHouseholdStore.householdId),
+            ),
             child: const Text('Retry'),
           ),
         ],
@@ -289,7 +337,11 @@ class _DishCard extends StatelessWidget {
                     const SizedBox(height: 1),
                     Row(
                       children: [
-                        const FaIcon(FontAwesomeIcons.clockRotateLeft, size: 10, color: AppColors.textMuted),
+                        const FaIcon(
+                          FontAwesomeIcons.clockRotateLeft,
+                          size: 10,
+                          color: AppColors.textMuted,
+                        ),
                         const SizedBox(width: 4),
                         Text(
                           dish.lastCookedLabel,
@@ -303,7 +355,10 @@ class _DishCard extends StatelessWidget {
                     if (isRepeat) ...[
                       const SizedBox(height: 4),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 5,
+                          vertical: 2,
+                        ),
                         decoration: BoxDecoration(
                           color: _repeatBg,
                           borderRadius: BorderRadius.circular(4),
